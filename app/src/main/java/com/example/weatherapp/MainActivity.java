@@ -1,3 +1,6 @@
+/*
+ * TODO: MAKE SURE TO HIDE AND CHANGE THE API KEY LATER
+ */
 package com.example.weatherapp;
 
 import android.os.Bundle;
@@ -71,41 +74,47 @@ class CityWeather {
         link = "http://api.openweathermap.org/data/2.5/onecall/timemachine"
                 + "?lat=" + lat
                 + "&lon=" + lon
-                + "&dt=" + localDateTimeToUnix(LocalDateTime.now())
+                + "&dt=" + Instant.now().getEpochSecond()
                 + "&units=" + "metric"
                 + "&appid=" + apiKey;
         jsonObject_history = getJsonFromUrl(link);
 
-
-        // take care of current day
         try {
-            JSONArray jsonArray_hourly = jsonObject_history.getJSONArray("hourly");
-            for (int i = 0; i < jsonArray_hourly.length(); i++)
-                current.put(i - jsonArray_hourly.length(), jsonArray_hourly.getJSONObject(i));
-
-            current.put(0, jsonObject_oneCall.getJSONObject("current"));
-
-            jsonArray_hourly = jsonObject_oneCall.getJSONArray("hourly");
-            for (int i = 0; i < jsonArray_hourly.length(); i++)
-                current.put(i + 1, jsonArray_hourly.getJSONObject(i));
-        } catch (JSONException e){
-            e.printStackTrace();
-        }
-
-        // take care of next day
-        try {
-            JSONArray jsonArray_daily = jsonObject_oneCall.getJSONArray("daily");
-//            Log.d("data", "Daily: ");
-            for (int i = 0; i < jsonArray_daily.length(); i++){
-//                Log.d("data", i + " -> " + new Date(1000 * Long.parseLong(jsonArray_daily.getJSONObject(i).get("dt").toString())));
-                daily.add(jsonArray_daily.getJSONObject(i));
-            }
+            setUp_current();
+            setUp_daily();
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        Log.d("data", "Current: ");
+        print();
+    }
 
+    void setUp_current() throws JSONException {
+        JSONArray jsonArray_hourly;
+
+        jsonArray_hourly = jsonObject_history.getJSONArray("hourly");
+        for (int i = 0; i < jsonArray_hourly.length(); i++) {
+            current.put(i - jsonArray_hourly.length(), jsonArray_hourly.getJSONObject(i));
+        }
+
+        current.put(0, jsonObject_oneCall.getJSONObject("current"));
+
+        jsonArray_hourly = jsonObject_oneCall.getJSONArray("hourly");
+        for (int i = 0; i < jsonArray_hourly.length(); i++) {
+            current.put(i + 1, jsonArray_hourly.getJSONObject(i));
+        }
+    }
+
+    void setUp_daily() throws JSONException {
+        JSONArray jsonArray_daily = jsonObject_oneCall.getJSONArray("daily");
+
+        for (int i = 0; i < jsonArray_daily.length(); i++){
+            daily.add(jsonArray_daily.getJSONObject(i));
+        }
+    }
+
+    void print(){
+        Log.d("data", "Current: ");
         for (Map.Entry<Integer, JSONObject> entry: current.entrySet()){
 //            Log.d("data", i + " -> " + daily.get(i));
             try {
@@ -126,14 +135,7 @@ class CityWeather {
             }
         }
 
-    }
 
-    long localDateTimeToUnix(LocalDateTime localDateTime){
-       return localDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() / 1000;
-    }
-
-    LocalDateTime unixToLocalDateTime(long unix){
-        return LocalDateTime.ofInstant(Instant.ofEpochMilli(unix * 1000), TimeZone.getDefault().toZoneId());
     }
 
     JSONObject getJsonFromUrl(String url) {
