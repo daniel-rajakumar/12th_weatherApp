@@ -15,6 +15,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TimeZone;
@@ -45,7 +46,8 @@ class CityWeather {
     JSONObject jsonObject_geo, jsonObject_oneCall, jsonObject_history;
     String lat, lon;
 
-    ArrayList<TreeMap<Integer, JSONObject>> days = new ArrayList<>();
+    TreeMap<Integer, JSONObject> current = new TreeMap<>();
+    ArrayList<JSONObject> daily = new ArrayList<>();
 
     CityWeather(String zip) {
         String link = "http://api.openweathermap.org/geo/1.0/zip?zip=" + zip  + ",US&appid=" + apiKey;
@@ -76,17 +78,16 @@ class CityWeather {
 
 
         // take care of current day
-        days.add(new TreeMap<>());
         try {
             JSONArray jsonArray_hourly = jsonObject_history.getJSONArray("hourly");
             for (int i = 0; i < jsonArray_hourly.length(); i++)
-                days.get(0).put(i - jsonArray_hourly.length(), jsonArray_hourly.getJSONObject(i));
+                current.put(i - jsonArray_hourly.length(), jsonArray_hourly.getJSONObject(i));
 
-            days.get(0).put(0, jsonObject_oneCall.getJSONObject("current"));
+            current.put(0, jsonObject_oneCall.getJSONObject("current"));
 
             jsonArray_hourly = jsonObject_oneCall.getJSONArray("hourly");
             for (int i = 0; i < jsonArray_hourly.length(); i++)
-                days.get(0).put(i + 1, jsonArray_hourly.getJSONObject(i));
+                current.put(i + 1, jsonArray_hourly.getJSONObject(i));
         } catch (JSONException e){
             e.printStackTrace();
         }
@@ -94,29 +95,37 @@ class CityWeather {
         // take care of next day
         try {
             JSONArray jsonArray_daily = jsonObject_oneCall.getJSONArray("daily");
-
+//            Log.d("data", "Daily: ");
             for (int i = 0; i < jsonArray_daily.length(); i++){
-                Log.d("data", jsonArray_daily.get(i).toString());
+//                Log.d("data", i + " -> " + new Date(1000 * Long.parseLong(jsonArray_daily.getJSONObject(i).get("dt").toString())));
+                daily.add(jsonArray_daily.getJSONObject(i));
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
+        Log.d("data", "Current: ");
 
-
-
-        for (int i = 0; i < days.size(); i++){
-            Log.d("data", i + " -> " + days.get(i));
+        for (Map.Entry<Integer, JSONObject> entry: current.entrySet()){
+//            Log.d("data", i + " -> " + daily.get(i));
+            try {
+                Log.d("data", entry.getKey() + " -> " + new Date(1000 * Long.parseLong(entry.getValue().get("dt").toString())));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
+        Log.d("data", "..."); Log.d("data", "..."); Log.d("data", "..."); Log.d("data", "...");
+        Log.d("data", "Daily: ");
+        for (int i = 0; i < daily.size(); i++){
+//            Log.d("data", i + " -> " + daily.get(i));
+            try {
+                Log.d("data", i + " -> " + new Date(1000 * Long.parseLong(daily.get(i).get("dt").toString())));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
-//        for (Map.Entry<Integer, JSONObject> entry: days.get(0).entrySet()){
-//                Log.d("data", entry.getKey() + "\t-> "
-////                        + new Date(Long.parseLong(entry.getValue().get("dt").toString()) * 1000)
-////                        + ",   " + entry.getValue().get("temp")
-//                         + entry.getValue()
-//                );
-//        }
     }
 
     long localDateTimeToUnix(LocalDateTime localDateTime){
