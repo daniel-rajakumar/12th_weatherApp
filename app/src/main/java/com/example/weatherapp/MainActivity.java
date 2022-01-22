@@ -3,58 +3,111 @@ package com.example.weatherapp;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.TimeZone;
+import java.util.TreeMap;
 
 public class MainActivity extends AppCompatActivity {
 
     String zip = "08852";
+
+    void run() {
+        CityWeather cityWeather = new CityWeather(zip);
+
+    }
+
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        this.run();
+    }
+
+}
+
+class CityWeather {
     String apiKey = "5f05d53229dbaaa68c7dca9bf5eacb09";
-    JSONObject jsonObject_geo, jsonObject_oneCall;
+    JSONObject jsonObject_geo, jsonObject_oneCall, jsonObject_history;
 
-    void run() throws JSONException {
-        String link = "http://api.openweathermap.org/geo/1.0/zip?zip=" + zip  + ",US&appid=" + apiKey;
+    TreeMap<Integer, JSONObject> map = new TreeMap<>();
 
-        jsonObject_geo = getJsonFromUrl(link);
+    CityWeather(String zip) {
+        try {
+            String link = "http://api.openweathermap.org/geo/1.0/zip?zip=" + zip  + ",US&appid=" + apiKey;
+            jsonObject_geo = getJsonFromUrl(link);
 
-        Log.d("data", jsonObject_geo.toString());
-        Log.d("data", "lat: " + jsonObject_geo.get("lat"));
-        Log.d("data", "lon: " + jsonObject_geo.get("lon"));
+            Log.d("data", String.format("lat: %s, lon: %s", jsonObject_geo.get("lat"), jsonObject_geo.get("lon")));
 
-        link = "https://api.openweathermap.org/data/2.5/onecall"
-                + "?lat=" + jsonObject_geo.get("lat")
-                + "&lon=" + jsonObject_geo.get("lon")
-                + "&exclude=" + "daily"
-                + "&units=" + "metric"
-                + "&appid=" + apiKey;
+            link = "https://api.openweathermap.org/data/2.5/onecall"
+                    + "?lat=" + jsonObject_geo.get("lat")
+                    + "&lon=" + jsonObject_geo.get("lon")
+                    + "&exclude=" + "daily"
+                    + "&units=" + "metric"
+                    + "&appid=" + apiKey;
 
+            jsonObject_oneCall = getJsonFromUrl(link);
 
-        jsonObject_oneCall = getJsonFromUrl(link);
-        Weather weather = new Weather(
-                jsonObject_oneCall.getJSONObject("current").get("temp").toString(),
-                jsonObject_oneCall.getJSONObject("current").getJSONArray("weather").getJSONObject(0).get("description").toString()
-        );
+            link = "http://api.openweathermap.org/data/2.5/onecall/timemachine"
+                    + "?lat=" + jsonObject_geo.get("lat")
+                    + "&lon=" + jsonObject_geo.get("lon")
+                    + "&dt=" + localDateTimeToUnix(LocalDateTime.now())
+                    + "&units=" + "metric"
+                    + "&appid=" + apiKey;
 
-        Log.d("data", "weather: " + weather.getDescription() + " | temp: " + weather.getTemp());
+            jsonObject_history = getJsonFromUrl(link);
 
+            JSONArray jsonArray_hourly = jsonObject_history.getJSONArray("hourly");
+            for (int i = 0; i < jsonArray_hourly.length(); i++){
+                map.put(i - jsonArray_hourly.length(), jsonArray_hourly.getJSONObject(i));
+            }
 
-        for (int i = 0; i < 4; i++){
-            weather = new Weather(
-                    jsonObject_oneCall.getJSONArray("hourly").getJSONObject(i).get("temp").toString(),
-                    jsonObject_oneCall.getJSONArray("hourly").getJSONObject(i).getJSONArray("weather").getJSONObject(0).get("description").toString()
-            );
+            map.put(0, jsonObject_oneCall.getJSONObject("current"));
 
-            Log.d("data", i + ") " + weather);
+            jsonArray_hourly = jsonObject_oneCall.getJSONArray("hourly");
+            for (int i = 0; i < jsonArray_hourly.length(); i++){
+                map.put(i + 1, jsonArray_hourly.getJSONObject(i));
+            }
 
+            for (Map.Entry<Integer, JSONObject> entry: map.entrySet()){
+                Log.d("data", entry.getKey() + "\t-> "
+//                        + new Date(Long.parseLong(entry.getValue().get("dt").toString()) * 1000)
+//                        + ",   " + entry.getValue().get("temp")
+                         + entry.getValue()
+
+                );
+            }
+
+        } catch (JSONException e){
+            e.printStackTrace();
         }
+    }
 
-//        Log.d("data", link);
+    long localDateTimeToUnix(LocalDateTime localDateTime){
+       return localDateTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli() / 1000;
+    }
+
+    LocalDateTime unixToLocalDateTime(long unix){
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(unix * 1000), TimeZone.getDefault().toZoneId());
     }
 
     JSONObject getJsonFromUrl(String url) {
@@ -62,9 +115,9 @@ public class MainActivity extends AppCompatActivity {
         Thread thread = new Thread(() -> {
             try {
                 jsonObject[0] = new JSONObject(
-                                    new Scanner(
-                                        new URL(url).openStream()
-                                    ).nextLine());
+                        new Scanner(
+                                new URL(url).openStream()
+                        ).nextLine());
             } catch (JSONException | IOException e) {
                 e.printStackTrace();
             }
@@ -81,39 +134,4 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        try { this.run(); } catch (JSONException e) { e.printStackTrace();
-        }
-    }
-
-}
-
-class Weather {
-    String description;
-    String temp;
-
-    Weather(String temp, String description){
-        this.description = description;
-        this.temp = temp;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getTemp() {
-        return temp;
-    }
-
-    @Override
-    public String toString() {
-        final StringBuffer sb = new StringBuffer("Weather{");
-        sb.append("description='").append(description).append('\'');
-        sb.append(", temp='").append(temp).append('\'');
-        sb.append('}');
-        return sb.toString();
-    }
 }
