@@ -3,7 +3,6 @@ package com.example.weatherapp;
 import android.os.Bundle;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONArray;
@@ -13,13 +12,9 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.URL;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TimeZone;
@@ -48,58 +43,80 @@ public class MainActivity extends AppCompatActivity {
 class CityWeather {
     String apiKey = "5f05d53229dbaaa68c7dca9bf5eacb09";
     JSONObject jsonObject_geo, jsonObject_oneCall, jsonObject_history;
+    String lat, lon;
 
-    TreeMap<Integer, JSONObject> map = new TreeMap<>();
+    ArrayList<TreeMap<Integer, JSONObject>> days = new ArrayList<>();
 
     CityWeather(String zip) {
+        String link = "http://api.openweathermap.org/geo/1.0/zip?zip=" + zip  + ",US&appid=" + apiKey;
+        jsonObject_geo = getJsonFromUrl(link);
+
         try {
-            String link = "http://api.openweathermap.org/geo/1.0/zip?zip=" + zip  + ",US&appid=" + apiKey;
-            jsonObject_geo = getJsonFromUrl(link);
+            lat = jsonObject_geo.get("lat").toString();
+            lon = jsonObject_geo.get("lon").toString();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
-            Log.d("data", String.format("lat: %s, lon: %s", jsonObject_geo.get("lat"), jsonObject_geo.get("lon")));
+        link = "https://api.openweathermap.org/data/2.5/onecall"
+                + "?lat=" + lat
+                + "&lon=" + lon
+//                + "&exclude=" + "daily"
+                + "&units=" + "metric"
+                + "&appid=" + apiKey;
+        jsonObject_oneCall = getJsonFromUrl(link);
 
-            link = "https://api.openweathermap.org/data/2.5/onecall"
-                    + "?lat=" + jsonObject_geo.get("lat")
-                    + "&lon=" + jsonObject_geo.get("lon")
-                    + "&exclude=" + "daily"
-                    + "&units=" + "metric"
-                    + "&appid=" + apiKey;
+        link = "http://api.openweathermap.org/data/2.5/onecall/timemachine"
+                + "?lat=" + lat
+                + "&lon=" + lon
+                + "&dt=" + localDateTimeToUnix(LocalDateTime.now())
+                + "&units=" + "metric"
+                + "&appid=" + apiKey;
+        jsonObject_history = getJsonFromUrl(link);
 
-            jsonObject_oneCall = getJsonFromUrl(link);
 
-            link = "http://api.openweathermap.org/data/2.5/onecall/timemachine"
-                    + "?lat=" + jsonObject_geo.get("lat")
-                    + "&lon=" + jsonObject_geo.get("lon")
-                    + "&dt=" + localDateTimeToUnix(LocalDateTime.now())
-                    + "&units=" + "metric"
-                    + "&appid=" + apiKey;
-
-            jsonObject_history = getJsonFromUrl(link);
-
+        // take care of current day
+        days.add(new TreeMap<>());
+        try {
             JSONArray jsonArray_hourly = jsonObject_history.getJSONArray("hourly");
-            for (int i = 0; i < jsonArray_hourly.length(); i++){
-                map.put(i - jsonArray_hourly.length(), jsonArray_hourly.getJSONObject(i));
-            }
+            for (int i = 0; i < jsonArray_hourly.length(); i++)
+                days.get(0).put(i - jsonArray_hourly.length(), jsonArray_hourly.getJSONObject(i));
 
-            map.put(0, jsonObject_oneCall.getJSONObject("current"));
+            days.get(0).put(0, jsonObject_oneCall.getJSONObject("current"));
 
             jsonArray_hourly = jsonObject_oneCall.getJSONArray("hourly");
-            for (int i = 0; i < jsonArray_hourly.length(); i++){
-                map.put(i + 1, jsonArray_hourly.getJSONObject(i));
-            }
-
-            for (Map.Entry<Integer, JSONObject> entry: map.entrySet()){
-                Log.d("data", entry.getKey() + "\t-> "
-//                        + new Date(Long.parseLong(entry.getValue().get("dt").toString()) * 1000)
-//                        + ",   " + entry.getValue().get("temp")
-                         + entry.getValue()
-
-                );
-            }
-
+            for (int i = 0; i < jsonArray_hourly.length(); i++)
+                days.get(0).put(i + 1, jsonArray_hourly.getJSONObject(i));
         } catch (JSONException e){
             e.printStackTrace();
         }
+
+        // take care of next day
+        try {
+            JSONArray jsonArray_daily = jsonObject_oneCall.getJSONArray("daily");
+
+            for (int i = 0; i < jsonArray_daily.length(); i++){
+                Log.d("data", jsonArray_daily.get(i).toString());
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+        for (int i = 0; i < days.size(); i++){
+            Log.d("data", i + " -> " + days.get(i));
+        }
+
+
+//        for (Map.Entry<Integer, JSONObject> entry: days.get(0).entrySet()){
+//                Log.d("data", entry.getKey() + "\t-> "
+////                        + new Date(Long.parseLong(entry.getValue().get("dt").toString()) * 1000)
+////                        + ",   " + entry.getValue().get("temp")
+//                         + entry.getValue()
+//                );
+//        }
     }
 
     long localDateTimeToUnix(LocalDateTime localDateTime){
