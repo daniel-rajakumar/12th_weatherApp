@@ -13,6 +13,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
@@ -35,10 +36,16 @@ import java.util.Scanner;
 import java.util.TimeZone;
 import java.util.TreeMap;
 
+import com.bumptech.glide.*;
+
 public class MainActivity extends AppCompatActivity {
 
     void run() {
         CityWeather cityWeather = new CityWeather("08852");
+
+        ImageView imageView = findViewById(R.id.image_view);
+
+        Glide.with(this).load(R.drawable.rain).into(imageView);
 
 
 
