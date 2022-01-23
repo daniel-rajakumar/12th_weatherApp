@@ -5,45 +5,31 @@ package com.example.weatherapp;
 
 import android.app.Activity;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.net.URL;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.TimeZone;
-import java.util.TreeMap;
 
 import com.bumptech.glide.*;
 
 public class MainActivity extends AppCompatActivity {
+    TextView textView_currentTemp, textView_currentWeatherDescription;
 
     void run() {
         CityWeather cityWeather = new CityWeather("08852");
 
         Glide.with(this).load(R.drawable.rain).into((ImageView) findViewById(R.id.image_view));
+
+        textView_currentTemp = findViewById(R.id.textView_temp);
+        textView_currentWeatherDescription = findViewById(R.id.textView_weatherDescription);
+
+        textView_currentTemp.setText(cityWeather.getCurrentTemp() + "°");
+        textView_currentWeatherDescription.setText(cityWeather.getCurrentWeatherDescription());
+
     }
 
 

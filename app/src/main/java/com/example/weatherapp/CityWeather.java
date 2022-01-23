@@ -12,6 +12,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.TreeMap;
 
@@ -112,7 +113,7 @@ class CityWeather {
 
     }
 
-    JSONObject getJsonFromUrl(String url) {
+    private JSONObject getJsonFromUrl(String url) {
         final JSONObject[] jsonObject = new JSONObject[1];
         Thread thread = new Thread(() -> {
             try {
@@ -135,5 +136,16 @@ class CityWeather {
         return jsonObject[0];
     }
 
+    public String getCurrentTemp() {
+        try {
+            return current.get(0).get("temp").toString();
+        } catch (JSONException e) { return null; }
+    }
+
+    public String getCurrentWeatherDescription(){
+        try {
+            return current.get(0).getJSONArray("weather").getJSONObject(0).get("description").toString();
+        } catch (JSONException e) { return null; }
+    }
 
 }
