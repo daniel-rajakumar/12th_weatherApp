@@ -12,4 +12,7 @@
     <color name="blue">#137df4</color>
     <color name="dark_blue">#031b39</color>
     <color name="transparent">#00000000</color>
+
+    <color name="font">#ffffff</color>
+    <color name="font_alt">#77ffffff</color>
 </resources>
