@@ -50,8 +50,8 @@
             android:id="@+id/view"
             android:layout_width="match_parent"
             android:layout_height="2dp"
-            android:layout_marginHorizontal="25dp"
-            android:background="#33ffffff"
+            android:layout_marginHorizontal="35dp"
+            android:background="#22ffffff"
             android:translationZ="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/cardView"
@@ -66,12 +66,14 @@
             android:translationZ="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/view"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@+id/view"
             app:layout_constraintTop_toBottomOf="@+id/view">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout3"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -80,23 +82,34 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:src="@mipmap/icon_wind_foreground"
                     android:id="@+id/imageView_currentWind"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
                     android:layout_gravity="center_horizontal"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_marginTop="-5dp"
+                    android:contentDescription="TODO"
                     android:scaleType="fitXY"
-                    android:contentDescription="TODO" />
+                    android:src="@mipmap/icon_wind_foreground"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.15" />
 
                 <TextView
                     android:id="@+id/textView_currentWindSpeed_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
                     android:text="13 km/h"
                     android:textColor="@color/white"
-                    android:layout_gravity="center_horizontal"
-                    android:textSize="25sp"
-                    android:translationZ="20dp" />
+                    android:textSize="20sp"
+                    android:translationZ="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.6" />
 
 
                 <TextView
@@ -107,37 +120,52 @@
                     android:text="Wind"
                     android:textColor="@color/font_alt"
                     android:textSize="15sp"
-                    android:translationZ="20dp" />
-            </LinearLayout>
+                    android:translationZ="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.85" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/constraintLayout2"
+                app:layout_constraintStart_toEndOf="@+id/constraintLayout3"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
                     android:id="@+id/imageView_currentHumidity"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_gravity="center_horizontal"
                     android:contentDescription="TODO"
                     android:scaleType="fitXY"
-                    android:src="@mipmap/icon_humidity_foreground" />
+                    android:src="@mipmap/icon_humidity_foreground"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.15" />
 
                 <TextView
                     android:id="@+id/textView_currentHumidity_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="24%"
                     android:layout_gravity="center_horizontal"
+                    android:text="24%"
                     android:textColor="@color/white"
-                    android:textSize="25sp"
-                    android:translationZ="20dp" />
+                    android:textSize="20sp"
+                    android:translationZ="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.6" />
 
 
                 <TextView
@@ -148,14 +176,20 @@
                     android:text="Humidity"
                     android:textColor="@color/font_alt"
                     android:textSize="15sp"
-                    android:translationZ="20dp" />
+                    android:translationZ="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.85" />
 
-            </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -165,24 +199,35 @@
 
                 <ImageView
                     android:id="@+id/imageView_currentVisibility"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
                     android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="-8dp"
                     android:layout_weight="1"
                     android:contentDescription="TODO"
                     android:scaleType="fitXY"
-                    android:src="@mipmap/icon_visibility_foreground" />
+                    android:src="@mipmap/icon_visibility_foreground"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.15" />
 
                 <TextView
                     android:id="@+id/textView_currentVisibility_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="10 mi"
-                    android:layout_weight="1"
                     android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:text="10 mi"
                     android:textColor="@color/white"
-                    android:textSize="25sp"
-                    android:translationZ="20dp" />
+                    android:textSize="20sp"
+                    android:translationZ="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.6" />
 
 
                 <TextView
@@ -194,10 +239,14 @@
                     android:text="Visibility"
                     android:textColor="@color/font_alt"
                     android:textSize="15sp"
-                    android:translationZ="20dp" />
+                    android:translationZ="20dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.85" />
 
-            </LinearLayout>
-
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
