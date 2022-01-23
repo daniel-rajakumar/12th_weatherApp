@@ -43,12 +43,7 @@ public class MainActivity extends AppCompatActivity {
     void run() {
         CityWeather cityWeather = new CityWeather("08852");
 
-        ImageView imageView = findViewById(R.id.image_view);
-
-        Glide.with(this).load(R.drawable.rain).into(imageView);
-
-
-
+        Glide.with(this).load(R.drawable.rain).into((ImageView) findViewById(R.id.image_view));
     }
 
 
