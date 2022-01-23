@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,20 +18,39 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.*;
 
+import java.util.concurrent.atomic.AtomicReference;
+
 public class MainActivity extends AppCompatActivity {
     TextView textView_currentTemp, textView_currentWeatherDescription;
+    EditText editText_ZipCode;
+    Button button_search;
+    AtomicReference<CityWeather> cityWeather;
+
 
     void run() {
-        CityWeather cityWeather = new CityWeather("08852");
+        cityWeather = new AtomicReference<>(new CityWeather("08852"));
 
         Glide.with(this).load(R.drawable.rain).into((ImageView) findViewById(R.id.image_view));
 
         textView_currentTemp = findViewById(R.id.textView_currentTemp);
         textView_currentWeatherDescription = findViewById(R.id.textView_weatherDescription);
 
-        textView_currentTemp.setText(cityWeather.getCurrentTemp() + "°");
-        textView_currentWeatherDescription.setText(cityWeather.getCurrentWeatherDescription());
+        updateInfo();
 
+        editText_ZipCode = findViewById(R.id.editText_ZipCode);
+        button_search = findViewById(R.id.button_search);
+
+        button_search.setOnClickListener(e -> {
+            cityWeather.set(new CityWeather(editText_ZipCode.getText().toString()));
+            updateInfo();
+        });
+
+
+    }
+
+    void updateInfo(){
+        textView_currentTemp.setText(cityWeather.get().getCurrentTemp() + "°");
+        textView_currentWeatherDescription.setText(cityWeather.get().getCurrentWeatherDescription());
     }
 
 
