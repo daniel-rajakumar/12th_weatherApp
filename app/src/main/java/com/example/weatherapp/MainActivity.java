@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
         Glide.with(this).load(R.drawable.rain).into((ImageView) findViewById(R.id.image_view));
 
-        textView_currentTemp = findViewById(R.id.textView_temp);
+        textView_currentTemp = findViewById(R.id.textView_currentTemp);
         textView_currentWeatherDescription = findViewById(R.id.textView_weatherDescription);
 
         textView_currentTemp.setText(cityWeather.getCurrentTemp() + "°");
