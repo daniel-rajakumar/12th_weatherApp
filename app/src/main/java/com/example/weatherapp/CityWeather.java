@@ -1,5 +1,7 @@
 package com.example.weatherapp;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -8,23 +10,31 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Scanner;
 import java.util.TreeMap;
 
 class CityWeather {
     String apiKey = "5f05d53229dbaaa68c7dca9bf5eacb09";
-    JSONObject jsonObject_geo, jsonObject_oneCall, jsonObject_history;
+    JSONObject jsonObject_geo,
+            jsonObject_metric_oneCall, jsonObject_metric_history,
+            jsonObject_imperial_oneCall, jsonObject_imperial_history;
     String lat, lon;
+    Geocoder geocoder;
 
-    TreeMap<Integer, JSONObject> current = new TreeMap<>();
-    ArrayList<JSONObject> daily = new ArrayList<>();
+    TreeMap<Integer, JSONObject> current_metric = new TreeMap<>();
+    TreeMap<Integer, JSONObject> current_imperial = new TreeMap<>();
+    ArrayList<JSONObject> daily_metric = new ArrayList<>();
+    ArrayList<JSONObject> daily_imperial = new ArrayList<>();
 
-    CityWeather(String zip) {
+    CityWeather(MainActivity mainActivity, String zip) {
+        geocoder = new Geocoder(mainActivity, Locale.getDefault());
         String link = "http://api.openweathermap.org/geo/1.0/zip?zip=" + zip + ",US&appid=" + apiKey;
         jsonObject_geo = getJsonFromUrl(link);
 
@@ -41,7 +51,16 @@ class CityWeather {
 //                + "&exclude=" + "daily"
                 + "&units=" + "metric"
                 + "&appid=" + apiKey;
-        jsonObject_oneCall = getJsonFromUrl(link);
+        jsonObject_metric_oneCall = getJsonFromUrl(link);
+
+        link = "https://api.openweathermap.org/data/2.5/onecall"
+                + "?lat=" + lat
+                + "&lon=" + lon
+//                + "&exclude=" + "daily"
+                + "&units=" + "imperial"
+                + "&appid=" + apiKey;
+        jsonObject_imperial_oneCall = getJsonFromUrl(link);
+
 
         link = "http://api.openweathermap.org/data/2.5/onecall/timemachine"
                 + "?lat=" + lat
@@ -49,7 +68,16 @@ class CityWeather {
                 + "&dt=" + Instant.now().getEpochSecond()
                 + "&units=" + "metric"
                 + "&appid=" + apiKey;
-        jsonObject_history = getJsonFromUrl(link);
+        jsonObject_metric_history = getJsonFromUrl(link);
+
+        link = "http://api.openweathermap.org/data/2.5/onecall/timemachine"
+                + "?lat=" + lat
+                + "&lon=" + lon
+                + "&dt=" + Instant.now().getEpochSecond()
+                + "&units=" + "imperial"
+                + "&appid=" + apiKey;
+        jsonObject_imperial_history = getJsonFromUrl(link);
+
 
         try {
             setUp_current();
@@ -58,36 +86,56 @@ class CityWeather {
             e.printStackTrace();
         }
 
-        print();
+        print_windSpeed();
+//        print();
+    }
+
+    void print_windSpeed(){
+        try {
+            Log.d("data", "windSpeed -> history: imperial: " + jsonObject_imperial_history.getJSONObject("current").get("wind_speed") + " mile/hr");
+            Log.d("data", "windSpeed -> oneCall: imperial: " + jsonObject_imperial_oneCall.getJSONObject("current").get("wind_speed") + " mile/hr");
+            Log.d("data", "windSpeed -> history: metric:   " + jsonObject_metric_history.getJSONObject("current").get("wind_speed") + " meter/sec");
+            Log.d("data", "windSpeed -> oneCall: metric:   " + jsonObject_metric_oneCall.getJSONObject("current").get("wind_speed") + " meter/sec");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     void setUp_current() throws JSONException {
-        JSONArray jsonArray_hourly;
+        JSONArray jsonArray_hourly_metric, jsonArray_hourly_imperial;
 
-        jsonArray_hourly = jsonObject_history.getJSONArray("hourly");
-        for (int i = 0; i < jsonArray_hourly.length(); i++) {
-            current.put(i - jsonArray_hourly.length(), jsonArray_hourly.getJSONObject(i));
+        jsonArray_hourly_metric = jsonObject_metric_history.getJSONArray("hourly");
+        jsonArray_hourly_imperial = jsonObject_imperial_history.getJSONArray("hourly");
+        for (int i = 0; i < jsonArray_hourly_metric.length(); i++) {
+            current_metric.put(i - jsonArray_hourly_metric.length(), jsonArray_hourly_metric.getJSONObject(i));
+            current_imperial.put(i - jsonArray_hourly_imperial.length(), jsonArray_hourly_imperial.getJSONObject(i));
         }
 
-        current.put(0, jsonObject_oneCall.getJSONObject("current"));
+        current_metric.put(0, jsonObject_metric_oneCall.getJSONObject("current"));
+        current_imperial.put(0, jsonObject_imperial_oneCall.getJSONObject("current"));
 
-        jsonArray_hourly = jsonObject_oneCall.getJSONArray("hourly");
-        for (int i = 0; i < jsonArray_hourly.length(); i++) {
-            current.put(i + 1, jsonArray_hourly.getJSONObject(i));
+        jsonArray_hourly_metric = jsonObject_metric_oneCall.getJSONArray("hourly");
+        jsonArray_hourly_imperial = jsonObject_imperial_oneCall.getJSONArray("hourly");
+        for (int i = 0; i < jsonArray_hourly_metric.length(); i++) {
+            current_metric.put(i + 1, jsonArray_hourly_metric.getJSONObject(i));
+            current_imperial.put(i + 1, jsonArray_hourly_imperial.getJSONObject(i));
         }
     }
 
     void setUp_daily() throws JSONException {
-        JSONArray jsonArray_daily = jsonObject_oneCall.getJSONArray("daily");
+        JSONArray jsonArray_metric_daily = jsonObject_metric_oneCall.getJSONArray("daily");
+        JSONArray jsonArray_imperial_daily = jsonObject_imperial_oneCall.getJSONArray("daily");
 
-        for (int i = 0; i < jsonArray_daily.length(); i++) {
-            daily.add(jsonArray_daily.getJSONObject(i));
+        for (int i = 0; i < jsonArray_metric_daily.length(); i++) {
+            daily_metric.add(jsonArray_metric_daily.getJSONObject(i));
+            daily_imperial.add(jsonArray_imperial_daily.getJSONObject(i));
         }
     }
 
     void print() {
         Log.d("data", "Current: ");
-        for (Map.Entry<Integer, JSONObject> entry : current.entrySet()) {
+        for (Map.Entry<Integer, JSONObject> entry : current_metric.entrySet()) {
 //            Log.d("data", i + " -> " + daily.get(i));
             try {
                 Log.d("data", entry.getKey() + " -> " + new Date(1000 * Long.parseLong(entry.getValue().get("dt").toString())));
@@ -101,10 +149,10 @@ class CityWeather {
         Log.d("data", "...");
         Log.d("data", "...");
         Log.d("data", "Daily: ");
-        for (int i = 0; i < daily.size(); i++) {
+        for (int i = 0; i < daily_metric.size(); i++) {
 //            Log.d("data", i + " -> " + daily.get(i));
             try {
-                Log.d("data", i + " -> " + new Date(1000 * Long.parseLong(daily.get(i).get("dt").toString())));
+                Log.d("data", i + " -> " + new Date(1000 * Long.parseLong(daily_metric.get(i).get("dt").toString())));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -136,16 +184,64 @@ class CityWeather {
         return jsonObject[0];
     }
 
+    private String getCityNameByCoordinates(double lat, double lon) {
+        try {
+            List<Address> addresses = geocoder.getFromLocation(lat, lon, 1);
+            if (addresses != null && addresses.size() > 0) {
+                return addresses.get(0).getLocality();
+            }
+            return null;
+        } catch (Exception e){
+            return  null;
+        }
+    }
+
+    public String getCityName(){
+        return getCityNameByCoordinates(Double.parseDouble(lat), Double.parseDouble(lon));
+    }
+
+
+    public String getCurrentVisibility(){
+        try {
+            return round(Double.parseDouble(current_imperial.get(0).get("visibility").toString()) * 0.000621371, 2) + "";
+        } catch (JSONException e) { return null; }
+    }
+
+
+    public String getCurrentHumidity(){
+        try {
+            return current_imperial.get(0).get("humidity").toString();
+        } catch (JSONException e) { return null; }
+    }
+
+    public String getCurrentWindSpeed(){
+        try {
+            return current_imperial.get(0).get("wind_speed").toString();
+        } catch (JSONException e) { return  null; }
+    }
+
+    public String getCurrentDate(){
+        try {
+            return new SimpleDateFormat("EEEE, MMM d — h:mm a").format(
+                        new Date(1000 * Long.parseLong(current_metric.get(0).get("dt").toString()))
+                   );
+        } catch (JSONException e) { return null; }
+    }
+
     public String getCurrentTemp() {
         try {
-            return current.get(0).get("temp").toString();
+            return current_imperial.get(0).get("temp").toString();
         } catch (JSONException e) { return null; }
     }
 
     public String getCurrentWeatherDescription(){
         try {
-            return current.get(0).getJSONArray("weather").getJSONObject(0).get("description").toString();
+            return current_metric.get(0).getJSONArray("weather").getJSONObject(0).get("description").toString();
         } catch (JSONException e) { return null; }
+    }
+
+    public double round(double num, int place){
+        return (double) Math.round(num * Math.pow(10, place)) / Math.pow(10, place);
     }
 
 }

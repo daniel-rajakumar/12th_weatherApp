@@ -21,19 +21,30 @@ import com.bumptech.glide.*;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class MainActivity extends AppCompatActivity {
-    TextView textView_currentTemp, textView_currentWeatherDescription;
+    TextView textView_currentTemp,
+            textView_currentWeatherDescription,
+            textView_cityName,
+            textView_currentDate,
+            textView_currentHumidity,
+            textView_currentVisibility,
+            textView_windSpeed;
     EditText editText_ZipCode;
     Button button_search;
     AtomicReference<CityWeather> cityWeather;
 
 
     void run() {
-        cityWeather = new AtomicReference<>(new CityWeather("08852"));
+        cityWeather = new AtomicReference<>(new CityWeather(this, "08852"));
 
         Glide.with(this).load(R.drawable.rain).into((ImageView) findViewById(R.id.image_view));
 
         textView_currentTemp = findViewById(R.id.textView_currentTemp);
         textView_currentWeatherDescription = findViewById(R.id.textView_weatherDescription);
+        textView_cityName = findViewById(R.id.textView_cityName);
+        textView_windSpeed = findViewById(R.id.textView_currentWindSpeed_1);
+        textView_currentDate = findViewById(R.id.textView_currentDate);
+        textView_currentHumidity = findViewById(R.id.textView_currentHumidity_1);
+        textView_currentVisibility = findViewById(R.id.textView_currentVisibility_1);
 
         updateInfo();
 
@@ -41,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         button_search = findViewById(R.id.button_search);
 
         button_search.setOnClickListener(e -> {
-            cityWeather.set(new CityWeather(editText_ZipCode.getText().toString()));
+            cityWeather.set(new CityWeather(this, editText_ZipCode.getText().toString()));
             updateInfo();
         });
 
@@ -51,6 +62,11 @@ public class MainActivity extends AppCompatActivity {
     void updateInfo(){
         textView_currentTemp.setText(cityWeather.get().getCurrentTemp() + "°");
         textView_currentWeatherDescription.setText(cityWeather.get().getCurrentWeatherDescription());
+        textView_cityName.setText(cityWeather.get().getCityName());
+        textView_windSpeed.setText(cityWeather.get().getCurrentWindSpeed() + " mph");
+        textView_currentDate.setText(cityWeather.get().getCurrentDate());
+        textView_currentHumidity.setText(cityWeather.get().getCurrentHumidity() + "%");
+        textView_currentVisibility.setText(cityWeather.get().getCurrentVisibility() + " mi");
     }
 
 
