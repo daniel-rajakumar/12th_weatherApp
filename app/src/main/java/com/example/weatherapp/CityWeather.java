@@ -101,20 +101,22 @@ class CityWeather {
 
 
         for (Map.Entry<Integer, JSONObject> entry : current_metric.entrySet()) {
-            HourlyWeather hourlyWeather = new HourlyWeather(getCurrentTemp(), "temp", 2);
-            list.add(hourlyWeather);
+            try {
+                String temp = entry.getValue().get("temp").toString();
+                String time = new SimpleDateFormat("hh:mm").format(
+                                new Date(1000 * Long.parseLong(entry.getValue().get("dt").toString()))
+                              );
+
+                list.add(new HourlyWeather(temp, time, R.drawable.icon_heavyrain));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
 
         recyclerView = mainActivity.findViewById(R.id.listView_hourlyWeather);
-        layoutManager = new LinearLayoutManager(mainActivity, LinearLayoutManager.HORIZONTAL, false);
-        recyclerView.setLayoutManager(layoutManager);
-
-        customAdapter = new CustomAdapter(list, mainActivity);
-
-//        DividerItemDecoration dividerIteamDecoration = new DividerItemDecoration(recyclerView.getContext(), LinearLayoutManager.HORIZONTAL);
-//        recyclerView.addItemDecoration(dividerIteamDecoration);
+        recyclerView.setLayoutManager(new LinearLayoutManager(mainActivity, LinearLayoutManager.HORIZONTAL, false));
         recyclerView.addItemDecoration(new CustomAdapter.HorizontalSpaceItemDecoration(100));
-        recyclerView.setAdapter(customAdapter);
+        recyclerView.setAdapter(new CustomAdapter(list, mainActivity));
 
 //        print_windSpeed();
 //        print();
