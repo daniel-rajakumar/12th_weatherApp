@@ -126,7 +126,7 @@ class CityWeather {
         recyclerView = mainActivity.findViewById(R.id.listView_hourlyWeather);
         recyclerView.setLayoutManager(new LinearLayoutManager(mainActivity, LinearLayoutManager.HORIZONTAL, false));
         if (count == 1) {
-            recyclerView.addItemDecoration(new CustomAdapter.HorizontalSpaceItemDecoration(50));
+            recyclerView.addItemDecoration(new CustomAdapter.HorizontalSpaceItemDecoration(40));
         }
         recyclerView.setAdapter(new CustomAdapter(list, mainActivity));
 
