@@ -46,6 +46,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Search"
+                android:background="@null"
+                android:backgroundTint="@color/dark_blue"
                 android:translationZ="10dp" />
 
 
@@ -400,6 +402,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:translationZ="10dp"
+            android:layout_marginTop="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

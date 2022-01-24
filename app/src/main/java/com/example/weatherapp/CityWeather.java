@@ -40,8 +40,10 @@ class CityWeather {
     RecyclerView recyclerView;
     CustomAdapter customAdapter;
     RecyclerView.LayoutManager layoutManager;
+    static int count = 0;
 
     CityWeather(MainActivity mainActivity, String zip) {
+        count++;
         geocoder = new Geocoder(mainActivity, Locale.getDefault());
         String link = "http://api.openweathermap.org/geo/1.0/zip?zip=" + zip + ",US&appid=" + apiKey;
         jsonObject_geo = getJsonFromUrl(link);
@@ -106,8 +108,9 @@ class CityWeather {
                 String time = new SimpleDateFormat("hh:mm").format(
                                 new Date(1000 * Long.parseLong(entry.getValue().get("dt").toString()))
                               );
+                int weatherIcon = getIcon(entry.getValue().getJSONArray("weather").getJSONObject(0).get("main").toString());
 
-                list.add(new HourlyWeather(temp, time, R.drawable.icon_heavyrain));
+                list.add(new HourlyWeather(temp, time, weatherIcon));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -115,7 +118,9 @@ class CityWeather {
 
         recyclerView = mainActivity.findViewById(R.id.listView_hourlyWeather);
         recyclerView.setLayoutManager(new LinearLayoutManager(mainActivity, LinearLayoutManager.HORIZONTAL, false));
-        recyclerView.addItemDecoration(new CustomAdapter.HorizontalSpaceItemDecoration(100));
+        if (count == 1) {
+            recyclerView.addItemDecoration(new CustomAdapter.HorizontalSpaceItemDecoration(100));
+        }
         recyclerView.setAdapter(new CustomAdapter(list, mainActivity));
 
 //        print_windSpeed();
@@ -274,6 +279,18 @@ class CityWeather {
 
     public double round(double num, int place){
         return (double) Math.round(num * Math.pow(10, place)) / Math.pow(10, place);
+    }
+
+    public int getIcon(String mainDescription){
+        switch (mainDescription.toLowerCase()) {
+            case "thunderstorm": return R.drawable.icon_tunder;
+            case "drizzle": return R.drawable.icon_heavyrain;
+            case "rain": return R.drawable.icon_rain;
+            case "snow": return R.drawable.icon_snow;
+            case "clear": return R.drawable.icon_sunny;
+            case "clouds": return R.drawable.icon_cloudy;
+            default: return R.drawable.icon_mist;
+        }
     }
 
 }
