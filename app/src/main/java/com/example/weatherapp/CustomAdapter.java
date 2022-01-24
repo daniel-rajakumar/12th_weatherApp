@@ -35,7 +35,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull CustomAdapter.ViewHolder holder, int position) {
         holder.textView_time.setText(list.get(position).getTime());
-        holder.textView_temp.setText(list.get(position).getTemp());
+        holder.textView_temp.setText(list.get(position).getTemp() + "°");
         Glide.with(context).load(list.get(position).getWeatherIcon()).into(holder.imageView_icon);
     }
 

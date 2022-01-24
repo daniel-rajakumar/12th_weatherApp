@@ -25,7 +25,7 @@ import java.util.Scanner;
 import java.util.TreeMap;
 
 class CityWeather {
-    String apiKey = "e5b8d9b00e4d05e512ab36250e0cfa2a";
+    String apiKey = "5f05d53229dbaaa68c7dca9bf5eacb09";
     JSONObject jsonObject_geo,
             jsonObject_metric_oneCall, jsonObject_metric_history,
             jsonObject_imperial_oneCall, jsonObject_imperial_history;
@@ -298,7 +298,7 @@ class CityWeather {
 //        try {
 //            return getGif(current_metric.get(0).getJSONArray("weather").getJSONObject(0).get("main").toString());
 //        } catch (JSONException e) { return -1; }
-        return R.drawable.gif_cloud;
+        return R.drawable.gif_snow;
     }
 
     public int getIcon(String mainDescription){
