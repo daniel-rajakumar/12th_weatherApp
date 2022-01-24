@@ -1,6 +1,7 @@
 package com.example.weatherapp;
 
 import android.content.Context;
+import android.graphics.Rect;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,4 +55,21 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             this.imageView_icon = itemView.findViewById(R.id.imageView_icon);
         }
     }
+
+    public static class HorizontalSpaceItemDecoration extends RecyclerView.ItemDecoration {
+
+        private final int horizontalSpaceHeight;
+
+        public HorizontalSpaceItemDecoration(int horizontalSpaceHeight) {
+            this.horizontalSpaceHeight = horizontalSpaceHeight;
+        }
+
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            if (parent.getChildAdapterPosition(view) != parent.getAdapter().getItemCount() - 1) {
+                outRect.right = horizontalSpaceHeight;
+            }
+        }
+    }
+
 }
+

@@ -110,6 +110,10 @@ class CityWeather {
         recyclerView.setLayoutManager(layoutManager);
 
         customAdapter = new CustomAdapter(list, mainActivity);
+
+//        DividerItemDecoration dividerIteamDecoration = new DividerItemDecoration(recyclerView.getContext(), LinearLayoutManager.HORIZONTAL);
+//        recyclerView.addItemDecoration(dividerIteamDecoration);
+        recyclerView.addItemDecoration(new CustomAdapter.HorizontalSpaceItemDecoration(100));
         recyclerView.setAdapter(customAdapter);
 
 //        print_windSpeed();
