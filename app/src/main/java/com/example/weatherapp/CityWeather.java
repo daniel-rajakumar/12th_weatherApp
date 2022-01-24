@@ -21,7 +21,7 @@ import java.util.Scanner;
 import java.util.TreeMap;
 
 class CityWeather {
-    String apiKey = "5f05d53229dbaaa68c7dca9bf5eacb09";
+    String apiKey = "e5b8d9b00e4d05e512ab36250e0cfa2a";
     JSONObject jsonObject_geo,
             jsonObject_metric_oneCall, jsonObject_metric_history,
             jsonObject_imperial_oneCall, jsonObject_imperial_history;
@@ -37,6 +37,8 @@ class CityWeather {
         geocoder = new Geocoder(mainActivity, Locale.getDefault());
         String link = "http://api.openweathermap.org/geo/1.0/zip?zip=" + zip + ",US&appid=" + apiKey;
         jsonObject_geo = getJsonFromUrl(link);
+
+        Log.d("data", link + " -> " + jsonObject_geo);
 
         try {
             lat = jsonObject_geo.get("lat").toString();
@@ -70,6 +72,8 @@ class CityWeather {
                 + "&appid=" + apiKey;
         jsonObject_metric_history = getJsonFromUrl(link);
 
+        Log.d("data", link + " -> " + jsonObject_metric_history);
+
         link = "http://api.openweathermap.org/data/2.5/onecall/timemachine"
                 + "?lat=" + lat
                 + "&lon=" + lon
@@ -77,6 +81,7 @@ class CityWeather {
                 + "&units=" + "imperial"
                 + "&appid=" + apiKey;
         jsonObject_imperial_history = getJsonFromUrl(link);
+        Log.d("data", link + " -> " + jsonObject_imperial_history);
 
 
         try {
