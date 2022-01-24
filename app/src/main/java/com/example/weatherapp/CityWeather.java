@@ -4,6 +4,9 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.util.Log;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,6 +35,11 @@ class CityWeather {
     TreeMap<Integer, JSONObject> current_imperial = new TreeMap<>();
     ArrayList<JSONObject> daily_metric = new ArrayList<>();
     ArrayList<JSONObject> daily_imperial = new ArrayList<>();
+
+    ArrayList<HourlyWeather> list = new ArrayList<>();
+    RecyclerView recyclerView;
+    CustomAdapter customAdapter;
+    RecyclerView.LayoutManager layoutManager;
 
     CityWeather(MainActivity mainActivity, String zip) {
         geocoder = new Geocoder(mainActivity, Locale.getDefault());
@@ -91,7 +99,20 @@ class CityWeather {
             e.printStackTrace();
         }
 
-        print_windSpeed();
+
+        for (Map.Entry<Integer, JSONObject> entry : current_metric.entrySet()) {
+            HourlyWeather hourlyWeather = new HourlyWeather(getCurrentTemp(), "temp", 2);
+            list.add(hourlyWeather);
+        }
+
+        recyclerView = mainActivity.findViewById(R.id.listView_hourlyWeather);
+        layoutManager = new LinearLayoutManager(mainActivity, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+
+        customAdapter = new CustomAdapter(list, mainActivity);
+        recyclerView.setAdapter(customAdapter);
+
+//        print_windSpeed();
 //        print();
     }
 
