@@ -31,12 +31,13 @@ public class MainActivity extends AppCompatActivity {
     EditText editText_ZipCode;
     Button button_search;
     AtomicReference<CityWeather> cityWeather;
+    ImageView textView_currentWeatherIcon;
+
 
 
     void run() {
         cityWeather = new AtomicReference<>(new CityWeather(this, "08852"));
 
-        Glide.with(this).load(R.drawable.rain).into((ImageView) findViewById(R.id.image_view));
 
         textView_currentTemp = findViewById(R.id.textView_currentTemp);
         textView_currentWeatherDescription = findViewById(R.id.textView_weatherDescription);
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         textView_currentDate = findViewById(R.id.textView_currentDate);
         textView_currentHumidity = findViewById(R.id.textView_currentHumidity_1);
         textView_currentVisibility = findViewById(R.id.textView_currentVisibility_1);
+        textView_currentWeatherIcon = findViewById(R.id.imageView_weatherIcon);
 
         updateInfo();
 
@@ -53,7 +55,9 @@ public class MainActivity extends AppCompatActivity {
 
         button_search.setOnClickListener(e -> {
             cityWeather.set(new CityWeather(this, editText_ZipCode.getText().toString()));
-            updateInfo();
+            if (cityWeather.get().isSuccess()){
+                updateInfo();
+            }
         });
 
 
@@ -67,6 +71,8 @@ public class MainActivity extends AppCompatActivity {
         textView_currentDate.setText(cityWeather.get().getCurrentDate());
         textView_currentHumidity.setText(cityWeather.get().getCurrentHumidity() + "%");
         textView_currentVisibility.setText(cityWeather.get().getCurrentVisibility() + " mi");
+        Glide.with(this).load(cityWeather.get().getCurrentIcon()).into(textView_currentWeatherIcon);
+        Glide.with(this).load(cityWeather.get().getCurrentGif()).into((ImageView) findViewById(R.id.image_view));
     }
 
 
@@ -98,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
         }
         win.setAttributes(winParams);
     }
+
 
 }
 

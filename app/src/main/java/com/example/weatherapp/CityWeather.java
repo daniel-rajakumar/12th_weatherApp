@@ -3,6 +3,7 @@ package com.example.weatherapp;
 import android.location.Address;
 import android.location.Geocoder;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,9 +39,10 @@ class CityWeather {
 
     ArrayList<HourlyWeather> list = new ArrayList<>();
     RecyclerView recyclerView;
-    CustomAdapter customAdapter;
-    RecyclerView.LayoutManager layoutManager;
+
     static int count = 0;
+    boolean success = false;
+
 
     CityWeather(MainActivity mainActivity, String zip) {
         count++;
@@ -49,6 +51,11 @@ class CityWeather {
         jsonObject_geo = getJsonFromUrl(link);
 
         Log.d("data", link + " -> " + jsonObject_geo);
+        if (jsonObject_geo == null){
+            Toast.makeText(mainActivity, "Not found.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        success = true;
 
         try {
             lat = jsonObject_geo.get("lat").toString();
@@ -281,6 +288,19 @@ class CityWeather {
         return (double) Math.round(num * Math.pow(10, place)) / Math.pow(10, place);
     }
 
+    public int getCurrentIcon(){
+        try {
+            return getIcon(current_metric.get(0).getJSONArray("weather").getJSONObject(0).get("main").toString());
+        } catch (JSONException e) { return -1; }
+    }
+
+    public int getCurrentGif(){
+//        try {
+//            return getGif(current_metric.get(0).getJSONArray("weather").getJSONObject(0).get("main").toString());
+//        } catch (JSONException e) { return -1; }
+        return R.drawable.gif_cloud;
+    }
+
     public int getIcon(String mainDescription){
         switch (mainDescription.toLowerCase()) {
             case "thunderstorm": return R.drawable.icon_tunder;
@@ -291,6 +311,22 @@ class CityWeather {
             case "clouds": return R.drawable.icon_cloudy;
             default: return R.drawable.icon_mist;
         }
+    }
+
+    public int getGif(String mainDescription){
+        switch (mainDescription.toLowerCase()) {
+            case "thunderstorm": return R.drawable.icon_tunder;
+            case "drizzle": return R.drawable.icon_heavyrain;
+            case "rain": return R.drawable.gif_rain;
+            case "snow": return R.drawable.gif_snow;
+            case "clear": return R.drawable.icon_sunny;
+            case "clouds": return R.drawable.icon_cloudy;
+            default: return R.drawable.icon_mist;
+        }
+    }
+
+    public boolean isSuccess(){
+        return success;
     }
 
 }
