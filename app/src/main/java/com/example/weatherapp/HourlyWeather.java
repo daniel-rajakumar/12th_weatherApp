@@ -5,11 +5,13 @@ import android.widget.ImageView;
 public class HourlyWeather {
     private String temp, time;
     private int weatherIcon;
+    private boolean isCurrent;
 
-    public HourlyWeather(String temp, String time, int weatherIcon) {
+    public HourlyWeather(String temp, String time, int weatherIcon, boolean isCurrent) {
         this.temp = temp;
         this.time = time;
         this.weatherIcon = weatherIcon;
+        this.isCurrent = isCurrent;
     }
 
     public String getTemp() {
@@ -22,6 +24,10 @@ public class HourlyWeather {
 
     public int getWeatherIcon() {
         return weatherIcon;
+    }
+
+    public boolean isCurrent() {
+        return isCurrent;
     }
 
     @Override

@@ -117,7 +117,7 @@ class CityWeather {
                               );
                 int weatherIcon = getIcon(entry.getValue().getJSONArray("weather").getJSONObject(0).get("main").toString());
 
-                list.add(new HourlyWeather(temp, time, weatherIcon));
+                list.add(new HourlyWeather(temp, time, weatherIcon, entry.getKey() == 0));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -126,7 +126,7 @@ class CityWeather {
         recyclerView = mainActivity.findViewById(R.id.listView_hourlyWeather);
         recyclerView.setLayoutManager(new LinearLayoutManager(mainActivity, LinearLayoutManager.HORIZONTAL, false));
         if (count == 1) {
-            recyclerView.addItemDecoration(new CustomAdapter.HorizontalSpaceItemDecoration(100));
+            recyclerView.addItemDecoration(new CustomAdapter.HorizontalSpaceItemDecoration(50));
         }
         recyclerView.setAdapter(new CustomAdapter(list, mainActivity));
 
