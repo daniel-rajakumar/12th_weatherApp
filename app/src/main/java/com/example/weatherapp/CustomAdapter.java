@@ -3,15 +3,18 @@ package com.example.weatherapp;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.Rect;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -42,21 +45,28 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         holder.textView_temp.setText(list.get(position).getTemp() + "°");
         Glide.with(context).load(list.get(position).getWeatherIcon()).into(holder.imageView_icon);
 
-        ViewGroup.MarginLayoutParams layoutParams =
-                (ViewGroup.MarginLayoutParams) holder.cardView_weatherCard.getLayoutParams();
-
+        MarginLayoutParams layoutParams = (MarginLayoutParams) holder.cardView_weatherCard.getLayoutParams();
 
 
         if (list.get(position).isCurrent()){
             Glide.with(context).load(R.drawable.gif_snow).into(holder.imageView_background);
             layoutParams.setMargins(0, 0, 0, 0);
-            holder.textView_time.setTextSize(20);
+            holder.imageView_icon.getLayoutParams().width = 175;
+            holder.imageView_icon.getLayoutParams().height = 175;
+            holder.textView_time.setTextSize(19);
             holder.textView_temp.setTextSize(20);
-            holder.imageView_icon.setScaleX(1.20f);
-            holder.imageView_icon.setScaleY(1.20f);
+            holder.cardView_weatherCard.setStrokeColor(ContextCompat.getColor(context, R.color.hourly_card_border));
+            holder.cardView_weatherCard.setStrokeWidth(5);
         } else {
             Glide.with(context).load(R.color.hourly_card_background).into(holder.imageView_background);
+//            layoutParams.setMargins(15, 15, 15, 15);
             layoutParams.setMargins(20, 20, 20, 20);
+            holder.imageView_icon.getLayoutParams().width = 125;
+            holder.imageView_icon.getLayoutParams().height = 125;
+            holder.textView_time.setTextSize(13);
+            holder.textView_temp.setTextSize(14);
+            holder.cardView_weatherCard.setStrokeColor(ContextCompat.getColor(context, R.color.hourly_card_border));
+            holder.cardView_weatherCard.setStrokeWidth(3);
         }
 
         holder.cardView_weatherCard.requestLayout();

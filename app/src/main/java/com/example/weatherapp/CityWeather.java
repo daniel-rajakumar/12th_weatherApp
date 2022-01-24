@@ -45,6 +45,7 @@ class CityWeather {
 
 
     CityWeather(MainActivity mainActivity, String zip) {
+        list.clear();
         count++;
         geocoder = new Geocoder(mainActivity, Locale.getDefault());
         String link = "http://api.openweathermap.org/geo/1.0/zip?zip=" + zip + ",US&appid=" + apiKey;
@@ -126,7 +127,7 @@ class CityWeather {
         recyclerView = mainActivity.findViewById(R.id.listView_hourlyWeather);
         recyclerView.setLayoutManager(new LinearLayoutManager(mainActivity, LinearLayoutManager.HORIZONTAL, false));
         if (count == 1) {
-            recyclerView.addItemDecoration(new CustomAdapter.HorizontalSpaceItemDecoration(40));
+            recyclerView.addItemDecoration(new CustomAdapter.HorizontalSpaceItemDecoration(60));
         }
         recyclerView.setAdapter(new CustomAdapter(list, mainActivity));
 
@@ -151,7 +152,7 @@ class CityWeather {
 
         jsonArray_hourly_metric = jsonObject_metric_history.getJSONArray("hourly");
         jsonArray_hourly_imperial = jsonObject_imperial_history.getJSONArray("hourly");
-        for (int i = 0; i < jsonArray_hourly_metric.length(); i++) {
+        for (int i = jsonArray_hourly_metric.length() - 2; i < jsonArray_hourly_metric.length(); i++) {
             current_metric.put(i - jsonArray_hourly_metric.length(), jsonArray_hourly_metric.getJSONObject(i));
             current_imperial.put(i - jsonArray_hourly_imperial.length(), jsonArray_hourly_imperial.getJSONObject(i));
         }
@@ -161,7 +162,7 @@ class CityWeather {
 
         jsonArray_hourly_metric = jsonObject_metric_oneCall.getJSONArray("hourly");
         jsonArray_hourly_imperial = jsonObject_imperial_oneCall.getJSONArray("hourly");
-        for (int i = 0; i < jsonArray_hourly_metric.length(); i++) {
+            for (int i = 1; i < 13; i++) {
             current_metric.put(i + 1, jsonArray_hourly_metric.getJSONObject(i));
             current_imperial.put(i + 1, jsonArray_hourly_imperial.getJSONObject(i));
         }

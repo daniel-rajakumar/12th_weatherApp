@@ -16,5 +16,6 @@
     <color name="font">#ffffff</color>
     <color name="font_alt">#99ffffff</color>
 
-    <color name="hourly_card_background">#111111</color>
+    <color name="hourly_card_background">#00000000</color>
+    <color name="hourly_card_border">#222222</color>
 </resources>
