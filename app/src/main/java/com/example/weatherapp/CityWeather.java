@@ -1,6 +1,5 @@
 package com.example.weatherapp;
 
-import android.location.Address;
 import android.location.Geocoder;
 import android.util.Log;
 import android.widget.Toast;
@@ -18,7 +17,6 @@ import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
@@ -29,7 +27,6 @@ class CityWeather {
     JSONObject jsonObject_geo,
             jsonObject_metric_oneCall, jsonObject_metric_history,
             jsonObject_imperial_oneCall, jsonObject_imperial_history;
-    String lat, lon;
     Geocoder geocoder;
 
     TreeMap<Integer, JSONObject> current_metric = new TreeMap<>();
@@ -40,13 +37,13 @@ class CityWeather {
     ArrayList<HourlyWeather> list = new ArrayList<>();
     RecyclerView recyclerView;
 
-    static int count = 0;
+    static int instanceCount = 0;
     boolean success = false;
 
 
     CityWeather(MainActivity mainActivity, String zip) {
         list.clear();
-        count++;
+        instanceCount++;
         geocoder = new Geocoder(mainActivity, Locale.getDefault());
         String link = "http://api.openweathermap.org/geo/1.0/zip?zip=" + zip + ",US&appid=" + apiKey;
         jsonObject_geo = getJsonFromUrl(link);
@@ -59,50 +56,43 @@ class CityWeather {
         success = true;
 
         try {
-            lat = jsonObject_geo.get("lat").toString();
-            lon = jsonObject_geo.get("lon").toString();
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+            link = "https://api.openweathermap.org/data/2.5/onecall"
+                    + "?lat=" + jsonObject_geo.get("lat").toString()
+                    + "&lon=" + jsonObject_geo.get("lon").toString()
+    //                + "&exclude=" + "daily"
+                    + "&units=" + "metric"
+                    + "&appid=" + apiKey;
+            jsonObject_metric_oneCall = getJsonFromUrl(link);
 
-        link = "https://api.openweathermap.org/data/2.5/onecall"
-                + "?lat=" + lat
-                + "&lon=" + lon
-//                + "&exclude=" + "daily"
-                + "&units=" + "metric"
-                + "&appid=" + apiKey;
-        jsonObject_metric_oneCall = getJsonFromUrl(link);
-
-        link = "https://api.openweathermap.org/data/2.5/onecall"
-                + "?lat=" + lat
-                + "&lon=" + lon
-//                + "&exclude=" + "daily"
-                + "&units=" + "imperial"
-                + "&appid=" + apiKey;
-        jsonObject_imperial_oneCall = getJsonFromUrl(link);
+            link = "https://api.openweathermap.org/data/2.5/onecall"
+                    + "?lat=" + jsonObject_geo.get("lat").toString()
+                    + "&lon=" + jsonObject_geo.get("lon").toString()
+    //                + "&exclude=" + "daily"
+                    + "&units=" + "imperial"
+                    + "&appid=" + apiKey;
+            jsonObject_imperial_oneCall = getJsonFromUrl(link);
 
 
-        link = "http://api.openweathermap.org/data/2.5/onecall/timemachine"
-                + "?lat=" + lat
-                + "&lon=" + lon
-                + "&dt=" + Instant.now().getEpochSecond()
-                + "&units=" + "metric"
-                + "&appid=" + apiKey;
-        jsonObject_metric_history = getJsonFromUrl(link);
+            link = "http://api.openweathermap.org/data/2.5/onecall/timemachine"
+                    + "?lat=" + jsonObject_geo.get("lat").toString()
+                    + "&lon=" + jsonObject_geo.get("lon").toString()
+                    + "&dt=" + Instant.now().getEpochSecond()
+                    + "&units=" + "metric"
+                    + "&appid=" + apiKey;
+            jsonObject_metric_history = getJsonFromUrl(link);
 
-        Log.d("data", link + " -> " + jsonObject_metric_history);
+            Log.d("data", link + " -> " + jsonObject_metric_history);
 
-        link = "http://api.openweathermap.org/data/2.5/onecall/timemachine"
-                + "?lat=" + lat
-                + "&lon=" + lon
-                + "&dt=" + Instant.now().getEpochSecond()
-                + "&units=" + "imperial"
-                + "&appid=" + apiKey;
-        jsonObject_imperial_history = getJsonFromUrl(link);
-        Log.d("data", link + " -> " + jsonObject_imperial_history);
+            link = "http://api.openweathermap.org/data/2.5/onecall/timemachine"
+                    + "?lat=" + jsonObject_geo.get("lat").toString()
+                    + "&lon=" + jsonObject_geo.get("lon").toString()
+                    + "&dt=" + Instant.now().getEpochSecond()
+                    + "&units=" + "imperial"
+                    + "&appid=" + apiKey;
+            jsonObject_imperial_history = getJsonFromUrl(link);
+            Log.d("data", link + " -> " + jsonObject_imperial_history);
 
 
-        try {
             setUp_current();
             setUp_daily();
         } catch (JSONException e) {
@@ -110,7 +100,7 @@ class CityWeather {
         }
 
 
-        for (Map.Entry<Integer, JSONObject> entry : current_metric.entrySet()) {
+        for (Map.Entry<Integer, JSONObject> entry : current_imperial.entrySet()) {
             try {
                 String temp = entry.getValue().get("temp").toString();
                 String time = new SimpleDateFormat("hh:mm").format(
@@ -126,7 +116,7 @@ class CityWeather {
 
         recyclerView = mainActivity.findViewById(R.id.listView_hourlyWeather);
         recyclerView.setLayoutManager(new LinearLayoutManager(mainActivity, LinearLayoutManager.HORIZONTAL, false));
-        if (count == 1) {
+        if (instanceCount == 1) {
             recyclerView.addItemDecoration(new CustomAdapter.HorizontalSpaceItemDecoration(60));
         }
         recyclerView.setAdapter(new CustomAdapter(list, mainActivity));
@@ -229,20 +219,24 @@ class CityWeather {
         return jsonObject[0];
     }
 
-    private String getCityNameByCoordinates(double lat, double lon) {
+    public String getLat(){
         try {
-            List<Address> addresses = geocoder.getFromLocation(lat, lon, 1);
-            if (addresses != null && addresses.size() > 0) {
-                return addresses.get(0).getLocality();
-            }
-            return null;
-        } catch (Exception e){
-            return  null;
-        }
+            return jsonObject_geo.get("lat").toString();
+        } catch (JSONException e) { return null; }
     }
 
+
+    public String getLon(){
+        try {
+            return jsonObject_geo.get("lon").toString();
+        } catch (JSONException e) { return null; }
+    }
+
+
     public String getCityName(){
-        return getCityNameByCoordinates(Double.parseDouble(lat), Double.parseDouble(lon));
+        try {
+            return jsonObject_geo.get("name").toString();
+        } catch (JSONException e) { return null; }
     }
 
 
@@ -304,7 +298,7 @@ class CityWeather {
 
     public int getIcon(String mainDescription){
         switch (mainDescription.toLowerCase()) {
-            case "thunderstorm": return R.drawable.icon_tunder;
+            case "thunderstorm": return R.drawable.icon_thunder;
             case "drizzle": return R.drawable.icon_heavyrain;
             case "rain": return R.drawable.icon_rain;
             case "snow": return R.drawable.icon_snow;
@@ -316,7 +310,7 @@ class CityWeather {
 
     public int getGif(String mainDescription){
         switch (mainDescription.toLowerCase()) {
-            case "thunderstorm": return R.drawable.icon_tunder;
+            case "thunderstorm": return R.drawable.icon_thunder;
             case "drizzle": return R.drawable.icon_heavyrain;
             case "rain": return R.drawable.gif_rain;
             case "snow": return R.drawable.gif_snow;
