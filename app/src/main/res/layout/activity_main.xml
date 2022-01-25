@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
+    app:layoutDescription="@xml/activity_main_scene"
     tools:context=".MainActivity">
 
 
@@ -45,9 +46,9 @@
                 android:id="@+id/button_search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Search"
                 android:background="@null"
                 android:backgroundTint="@color/dark_blue"
+                android:text="Search"
                 android:translationZ="10dp" />
 
 
@@ -58,7 +59,7 @@
             android:id="@+id/textView_cityName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="-10dp"
+            android:layout_marginBottom="15dp"
             android:singleLine="true"
             android:text="New York"
             android:textAlignment="center"
@@ -70,6 +71,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout"
             app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/textView_lat_lon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(lat, lon)"
+            android:textColor="@color/font_alt"
+            android:translationZ="10dp"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView_cityName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/imageView_weatherIcon" />
 
         <ImageView
             android:id="@+id/imageView_weatherIcon"
@@ -355,8 +369,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="TODO"
-                    android:scaleType="fitXY"
-                    />
+                    android:scaleType="fitXY" />
 
             </androidx.cardview.widget.CardView>
         </androidx.cardview.widget.CardView>
@@ -365,6 +378,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout5"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
@@ -402,13 +416,13 @@
             android:id="@+id/listView_hourlyWeather"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:orientation="horizontal"
             android:translationZ="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:orientation="horizontal"
             app:layout_constraintTop_toBottomOf="@+id/textView_today" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.motion.widget.MotionLayout>

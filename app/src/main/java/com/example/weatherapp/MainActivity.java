@@ -27,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
             textView_currentDate,
             textView_currentHumidity,
             textView_currentVisibility,
+            textView_lat_lon,
             textView_windSpeed;
     EditText editText_ZipCode;
     Button button_search;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         textView_currentHumidity = findViewById(R.id.textView_currentHumidity_1);
         textView_currentVisibility = findViewById(R.id.textView_currentVisibility_1);
         textView_currentWeatherIcon = findViewById(R.id.imageView_weatherIcon);
+        textView_lat_lon = findViewById(R.id.textView_lat_lon);
 
         updateInfo();
 
@@ -71,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
         textView_currentDate.setText(cityWeather.get().getCurrentDate());
         textView_currentHumidity.setText(cityWeather.get().getCurrentHumidity() + "%");
         textView_currentVisibility.setText(cityWeather.get().getCurrentVisibility() + " mi");
+        textView_lat_lon.setText(String.format("(%s, %s)", cityWeather.get().getLat(), cityWeather.get().getLon()));
         Glide.with(this).load(cityWeather.get().getCurrentIcon()).into(textView_currentWeatherIcon);
         Glide.with(this).load(cityWeather.get().getCurrentGif()).into((ImageView) findViewById(R.id.image_view));
     }
