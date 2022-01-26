@@ -338,6 +338,7 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:translationZ="10dp"
+        android:paddingTop="10dp"
         android:nestedScrollingEnabled="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
