@@ -20,10 +20,10 @@ import java.util.ArrayList;
 
 public class CustomAdapter_2 extends RecyclerView.Adapter<CustomAdapter_2.ViewHolder> {
 
-    ArrayList<HourlyWeather> list;
+    ArrayList<DailyWeather> list;
     Context context;
 
-    public CustomAdapter_2(ArrayList<HourlyWeather> list, Context context) {
+    public CustomAdapter_2(ArrayList<DailyWeather> list, Context context) {
         this.list = list;
         this.context = context;
     }
@@ -37,36 +37,11 @@ public class CustomAdapter_2 extends RecyclerView.Adapter<CustomAdapter_2.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull CustomAdapter_2.ViewHolder holder, int position) {
-        holder.textView_time.setText(list.get(position).getTime());
-        holder.textView_temp.setText(list.get(position).getTemp() + "°");
-        Glide.with(context).load(list.get(position).getWeatherIcon()).into(holder.imageView_icon);
-
-        MarginLayoutParams layoutParams = (MarginLayoutParams) holder.cardView_weatherCard.getLayoutParams();
-
-
-        if (list.get(position).isCurrent()){
-            Glide.with(context).load(R.drawable.gif_snow).into(holder.imageView_background);
-            holder.cardView_weatherCard.setContentPadding(0, 0, 0, 0);
-            layoutParams.setMargins(0, 0, 0, 0);
-            holder.imageView_icon.getLayoutParams().width = 175;
-            holder.imageView_icon.getLayoutParams().height = 175;
-            holder.textView_time.setTextSize(19);
-            holder.textView_temp.setTextSize(20);
-            holder.cardView_weatherCard.setStrokeColor(ContextCompat.getColor(context, R.color.hourly_card_border));
-            holder.cardView_weatherCard.setStrokeWidth(5);
-        } else {
-            Glide.with(context).load(R.color.hourly_card_background).into(holder.imageView_background);
-            holder.cardView_weatherCard.setContentPadding(5, 5, 5, 5);
-            layoutParams.setMargins(20, 20, 20, 20);
-            holder.imageView_icon.getLayoutParams().width = 125;
-            holder.imageView_icon.getLayoutParams().height = 125;
-            holder.textView_time.setTextSize(13);
-            holder.textView_temp.setTextSize(14);
-            holder.cardView_weatherCard.setStrokeColor(ContextCompat.getColor(context, R.color.hourly_card_border));
-            holder.cardView_weatherCard.setStrokeWidth(3);
-        }
-
-        holder.cardView_weatherCard.requestLayout();
+        Glide.with(context).load(list.get(position).getWeatherIcon()).into(holder.imageView_dailyWeatherIcon);
+        holder.TextView_dailyTempLow.setText(list.get(position).getTemp_low());
+        holder.textView_dailyTempHigh.setText(list.get(position).getTemp_high());
+        holder.textView_dailyMainDescription.setText(list.get(position).getDescription());
+        holder.textView_dailyTime.setText(list.get(position).getTime());
     }
 
     @Override
@@ -75,17 +50,20 @@ public class CustomAdapter_2 extends RecyclerView.Adapter<CustomAdapter_2.ViewHo
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textView_temp, textView_time;
-        ImageView imageView_icon, imageView_background;
-        MaterialCardView cardView_weatherCard;
+        TextView textView_dailyTime,
+                textView_dailyMainDescription,
+                textView_dailyTempHigh,
+                TextView_dailyTempLow;
+
+        ImageView imageView_dailyWeatherIcon;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.textView_temp = itemView.findViewById(R.id.textView_temp);
-            this.textView_time = itemView.findViewById(R.id.textView_time);
-            this.imageView_icon = itemView.findViewById(R.id.imageView_icon);
-            this.imageView_background = itemView.findViewById(R.id.imageView_background);
-            this.cardView_weatherCard = itemView.findViewById(R.id.cardView_WeatherCard);
+            textView_dailyTime = itemView.findViewById(R.id.textView_dailyTime);
+            imageView_dailyWeatherIcon = itemView.findViewById(R.id.imageView_dailyWeatherIcon);
+            textView_dailyMainDescription = itemView.findViewById(R.id.textView_dailyMainDescription);
+            textView_dailyTempHigh = itemView.findViewById(R.id.textView_dailyTempHigh);
+            TextView_dailyTempLow = itemView.findViewById(R.id.textView_dailyTempLow);
         }
     }
 

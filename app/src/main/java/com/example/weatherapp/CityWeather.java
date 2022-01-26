@@ -34,7 +34,8 @@ class CityWeather {
     ArrayList<JSONObject> daily_metric = new ArrayList<>();
     ArrayList<JSONObject> daily_imperial = new ArrayList<>();
 
-    ArrayList<HourlyWeather> list = new ArrayList<>();
+    ArrayList<HourlyWeather> list_hourly = new ArrayList<>();
+    ArrayList<DailyWeather> list_daily = new ArrayList<>();
     RecyclerView recyclerView_hourly, recyclerView_daily;
 
     static int instanceCount = 0;
@@ -42,7 +43,8 @@ class CityWeather {
 
 
     CityWeather(MainActivity mainActivity, String zip) {
-        list.clear();
+        list_hourly.clear();
+        list_daily.clear();
         instanceCount++;
         geocoder = new Geocoder(mainActivity, Locale.getDefault());
         String link = "http://api.openweathermap.org/geo/1.0/zip?zip=" + zip + ",US&appid=" + apiKey;
@@ -108,25 +110,43 @@ class CityWeather {
                               );
                 int weatherIcon = getIcon(entry.getValue().getJSONArray("weather").getJSONObject(0).get("main").toString());
 
-                list.add(new HourlyWeather(temp, time, weatherIcon, entry.getKey() == 0));
+                list_hourly.add(new HourlyWeather(temp, time, weatherIcon, entry.getKey() == 0));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
+        for (JSONObject jsonObject: daily_imperial)
+        {
+            try {
+                String temp_low =  jsonObject.getJSONObject("temp").get("min").toString();
+                String temp_high = jsonObject.getJSONObject("temp").get("max").toString();
+                String description = jsonObject.getJSONArray("weather").getJSONObject(0).get("main").toString();
+                String time = new SimpleDateFormat("hh:mm").format(
+                        new Date(1000 * Long.parseLong(jsonObject.get("dt").toString()))
+                );
+                int weatherIcon = getIcon(jsonObject.getJSONArray("weather").getJSONObject(0).get("main").toString());
+
+                list_daily.add(new DailyWeather(time, temp_low, temp_high, description, weatherIcon));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+
+
         recyclerView_hourly = mainActivity.findViewById(R.id.listView_hourlyWeather);
+        recyclerView_daily = mainActivity.findViewById(R.id.listView_dailyWeather);
         recyclerView_hourly.setLayoutManager(new LinearLayoutManager(mainActivity, LinearLayoutManager.HORIZONTAL, false));
+        recyclerView_daily.setLayoutManager(new LinearLayoutManager(mainActivity, LinearLayoutManager.VERTICAL, false));
+
+
         if (instanceCount == 1) {
             recyclerView_hourly.addItemDecoration(new CustomAdapter.VerticalSpaceItemDecoration(60));
+//            recyclerView_daily.addItemDecoration(new CustomAdapter.VerticalSpaceItemDecoration(60));
         }
-        recyclerView_hourly.setAdapter(new CustomAdapter(list, mainActivity));
-
-        recyclerView_daily = mainActivity.findViewById(R.id.listView_dailyWeather);
-        recyclerView_daily.setLayoutManager(new LinearLayoutManager(mainActivity, LinearLayoutManager.VERTICAL, false));
-        if (instanceCount == 1) {
-            recyclerView_daily.addItemDecoration(new CustomAdapter.VerticalSpaceItemDecoration(60));
-        }
-        recyclerView_daily.setAdapter(new CustomAdapter_2(list, mainActivity));
+        recyclerView_hourly.setAdapter(new CustomAdapter(list_hourly, mainActivity));
+        recyclerView_daily.setAdapter(new CustomAdapter_2(list_daily, mainActivity));
 //        print_windSpeed();
 //        print();
     }

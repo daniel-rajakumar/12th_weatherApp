@@ -1,9 +1,7 @@
 package com.example.weatherapp;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -89,7 +85,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             this.textView_time = itemView.findViewById(R.id.textView_time);
             this.imageView_icon = itemView.findViewById(R.id.imageView_icon);
             this.imageView_background = itemView.findViewById(R.id.imageView_background);
-            this.cardView_weatherCard = itemView.findViewById(R.id.cardView_WeatherCard);
+            this.cardView_weatherCard = itemView.findViewById(R.id.constrainLayout);
         }
     }
 

@@ -30,13 +30,4 @@ public class HourlyWeather {
         return isCurrent;
     }
 
-    @Override
-    public String toString() {
-        final StringBuffer sb = new StringBuffer("HourlyWeather{");
-        sb.append("temp='").append(temp).append('\'');
-        sb.append(", time='").append(time).append('\'');
-        sb.append(", weatherIcon=").append(weatherIcon);
-        sb.append('}');
-        return sb.toString();
-    }
 }
