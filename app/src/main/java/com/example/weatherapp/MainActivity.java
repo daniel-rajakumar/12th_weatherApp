@@ -55,12 +55,12 @@ public class MainActivity extends AppCompatActivity {
         editText_ZipCode = findViewById(R.id.editText_ZipCode);
         button_search = findViewById(R.id.button_search);
 
-        button_search.setOnClickListener(e -> {
-            cityWeather.set(new CityWeather(this, editText_ZipCode.getText().toString()));
-            if (cityWeather.get().isSuccess()){
-                updateInfo();
-            }
-        });
+//        button_search.setOnClickListener(e -> {
+//            cityWeather.set(new CityWeather(this, editText_ZipCode.getText().toString()));
+//            if (cityWeather.get().isSuccess()){
+////                updateInfo();
+//            }
+//        });
 
 
     }
