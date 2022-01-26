@@ -142,7 +142,8 @@ class CityWeather {
 
         jsonArray_hourly_metric = jsonObject_metric_history.getJSONArray("hourly");
         jsonArray_hourly_imperial = jsonObject_imperial_history.getJSONArray("hourly");
-        for (int i = jsonArray_hourly_metric.length() - 2; i < jsonArray_hourly_metric.length(); i++) {
+//        for (int i = jsonArray_hourly_metric.length() - 2; i < jsonArray_hourly_metric.length(); i++) {
+        for (int i = jsonArray_hourly_metric.length() - 1; i < jsonArray_hourly_metric.length(); i++) {
             current_metric.put(i - jsonArray_hourly_metric.length(), jsonArray_hourly_metric.getJSONObject(i));
             current_imperial.put(i - jsonArray_hourly_imperial.length(), jsonArray_hourly_imperial.getJSONObject(i));
         }
