@@ -50,6 +50,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
         if (list.get(position).isCurrent()){
             Glide.with(context).load(R.drawable.gif_snow).into(holder.imageView_background);
+            holder.cardView_weatherCard.setContentPadding(0, 0, 0, 0);
             layoutParams.setMargins(0, 0, 0, 0);
             holder.imageView_icon.getLayoutParams().width = 175;
             holder.imageView_icon.getLayoutParams().height = 175;
@@ -59,7 +60,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
             holder.cardView_weatherCard.setStrokeWidth(5);
         } else {
             Glide.with(context).load(R.color.hourly_card_background).into(holder.imageView_background);
-//            layoutParams.setMargins(15, 15, 15, 15);
+            holder.cardView_weatherCard.setContentPadding(5, 5, 5, 5);
             layoutParams.setMargins(20, 20, 20, 20);
             holder.imageView_icon.getLayoutParams().width = 125;
             holder.imageView_icon.getLayoutParams().height = 125;
