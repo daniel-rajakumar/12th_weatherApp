@@ -93,17 +93,17 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         }
     }
 
-    public static class HorizontalSpaceItemDecoration extends RecyclerView.ItemDecoration {
+    public static class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
 
         private final int horizontalSpaceHeight;
 
-        public HorizontalSpaceItemDecoration(int horizontalSpaceHeight) {
+        public VerticalSpaceItemDecoration(int horizontalSpaceHeight) {
             this.horizontalSpaceHeight = horizontalSpaceHeight;
         }
 
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             if (parent.getChildAdapterPosition(view) != parent.getAdapter().getItemCount() - 1) {
-                outRect.right = horizontalSpaceHeight;
+                outRect.bottom = horizontalSpaceHeight;
             }
         }
     }

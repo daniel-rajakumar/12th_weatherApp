@@ -35,7 +35,7 @@ class CityWeather {
     ArrayList<JSONObject> daily_imperial = new ArrayList<>();
 
     ArrayList<HourlyWeather> list = new ArrayList<>();
-    RecyclerView recyclerView;
+    RecyclerView recyclerView_hourly, recyclerView_daily;
 
     static int instanceCount = 0;
     boolean success = false;
@@ -114,13 +114,19 @@ class CityWeather {
             }
         }
 
-        recyclerView = mainActivity.findViewById(R.id.listView_hourlyWeather);
-        recyclerView.setLayoutManager(new LinearLayoutManager(mainActivity, LinearLayoutManager.HORIZONTAL, false));
+        recyclerView_hourly = mainActivity.findViewById(R.id.listView_hourlyWeather);
+        recyclerView_hourly.setLayoutManager(new LinearLayoutManager(mainActivity, LinearLayoutManager.HORIZONTAL, false));
         if (instanceCount == 1) {
-            recyclerView.addItemDecoration(new CustomAdapter.HorizontalSpaceItemDecoration(60));
+            recyclerView_hourly.addItemDecoration(new CustomAdapter.VerticalSpaceItemDecoration(60));
         }
-        recyclerView.setAdapter(new CustomAdapter(list, mainActivity));
+        recyclerView_hourly.setAdapter(new CustomAdapter(list, mainActivity));
 
+        recyclerView_daily = mainActivity.findViewById(R.id.listView_dailyWeather);
+        recyclerView_daily.setLayoutManager(new LinearLayoutManager(mainActivity, LinearLayoutManager.VERTICAL, false));
+        if (instanceCount == 1) {
+            recyclerView_daily.addItemDecoration(new CustomAdapter.VerticalSpaceItemDecoration(60));
+        }
+        recyclerView_daily.setAdapter(new CustomAdapter_2(list, mainActivity));
 //        print_windSpeed();
 //        print();
     }

@@ -331,4 +331,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_today" />
 
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listView_dailyWeather"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:translationZ="10dp"
+        android:nestedScrollingEnabled="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="invisible"
+        app:layout_constraintTop_toBottomOf="@+id/textView_today" />
+
+
 </androidx.constraintlayout.motion.widget.MotionLayout>
