@@ -9,7 +9,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.constraintlayout.motion.widget.MotionLayout;
-import androidx.constraintlayout.motion.widget.TransitionAdapter;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -47,12 +46,8 @@ class CityWeather {
     ArrayList<DailyWeather> list_daily = new ArrayList<>();
     RecyclerView recyclerView_hourly, recyclerView_daily;
 
-    MotionLayout motionLayout;
 
     static int instanceCount = 0;
-    boolean success = false;
-
-
 
     TextView textView_currentTemp,
             textView_currentWeatherDescription,
@@ -62,10 +57,13 @@ class CityWeather {
             textView_currentVisibility,
             textView_lat_lon,
             textView_windSpeed;
+
+
     EditText editText_ZipCode;
     Button button_search;
     AtomicReference<CityWeather> cityWeather;
-    ImageView textView_currentWeatherIcon;
+    ImageView imageView_currentWeatherIcon, imageView_backgroundGif;
+    MotionLayout motionLayout;
 
 
 
@@ -73,6 +71,7 @@ class CityWeather {
     CityWeather(MainActivity mainActivity, String zip) {
         list_hourly.clear();
         list_daily.clear();
+
         instanceCount++;
         geocoder = new Geocoder(mainActivity, Locale.getDefault());
         String link = "http://api.openweathermap.org/geo/1.0/zip?zip=" + zip + ",US&appid=" + apiKey;
@@ -83,24 +82,8 @@ class CityWeather {
             Toast.makeText(mainActivity, "Not found.", Toast.LENGTH_SHORT).show();
             return;
         }
-        success = true;
 
-
-        textView_currentTemp = mainActivity.findViewById(R.id.textView_currentTemp);
-        textView_currentWeatherDescription = mainActivity.findViewById(R.id.textView_weatherDescription);
-        textView_cityName = mainActivity.findViewById(R.id.textView_cityName);
-        textView_windSpeed = mainActivity.findViewById(R.id.textView_currentWindSpeed_1);
-        textView_currentDate = mainActivity.findViewById(R.id.textView_currentDate);
-        textView_currentHumidity = mainActivity.findViewById(R.id.textView_currentHumidity_1);
-        textView_currentVisibility = mainActivity.findViewById(R.id.textView_currentVisibility_1);
-        textView_currentWeatherIcon = mainActivity.findViewById(R.id.imageView_weatherIcon);
-        textView_lat_lon = mainActivity.findViewById(R.id.textView_lat_lon);
-
-
-        editText_ZipCode = mainActivity.findViewById(R.id.editText_ZipCode);
-        button_search = mainActivity.findViewById(R.id.button_search);
-
-
+        assignVariables(mainActivity);
 
 
         try {
@@ -182,8 +165,6 @@ class CityWeather {
 
 
 
-        recyclerView_hourly = mainActivity.findViewById(R.id.listView_hourlyWeather);
-        recyclerView_daily = mainActivity.findViewById(R.id.listView_dailyWeather);
         recyclerView_hourly.setLayoutManager(new LinearLayoutManager(mainActivity, LinearLayoutManager.HORIZONTAL, false));
         recyclerView_daily.setLayoutManager(new LinearLayoutManager(mainActivity, LinearLayoutManager.VERTICAL, false));
 
@@ -199,7 +180,6 @@ class CityWeather {
 
 
 
-        motionLayout = mainActivity.findViewById(R.id.motionLayout);
 
         motionLayout.setTransitionListener(new MotionLayout.TransitionListener() {
 
@@ -210,8 +190,15 @@ class CityWeather {
             public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
                 if (motionLayout.getProgress() <= 0.5) {
                     textView_currentTemp.setText(getCurrentTemp() + "°");
+                    textView_currentWeatherDescription.setText(getCurrentWeatherDescription());
+                    Glide.with(mainActivity).load(getCurrentIcon()).into(imageView_currentWeatherIcon);
+                    Glide.with(mainActivity).load(getCurrentGif()).into(imageView_backgroundGif);
                 } else {
-                    textView_currentTemp.setText("tomorrow");
+                    textView_currentTemp.setText("Temp");
+                    textView_currentWeatherDescription.setText("Desceiption");
+                    Glide.with(mainActivity).load(R.drawable.icon_heavyrain).into(imageView_currentWeatherIcon);
+                    Glide.with(mainActivity).load(R.drawable.gif_rain).into(imageView_backgroundGif);
+
                 }
             }
 
@@ -424,8 +411,23 @@ class CityWeather {
         }
     }
 
-    public boolean isSuccess(){
-        return success;
+    void assignVariables(MainActivity mainActivity){
+        textView_currentTemp = mainActivity.findViewById(R.id.textView_currentTemp);
+        textView_currentWeatherDescription = mainActivity.findViewById(R.id.textView_weatherDescription);
+        textView_cityName = mainActivity.findViewById(R.id.textView_cityName);
+        textView_windSpeed = mainActivity.findViewById(R.id.textView_currentWindSpeed_1);
+        textView_currentDate = mainActivity.findViewById(R.id.textView_currentDate);
+        textView_currentHumidity = mainActivity.findViewById(R.id.textView_currentHumidity_1);
+        textView_currentVisibility = mainActivity.findViewById(R.id.textView_currentVisibility_1);
+        imageView_currentWeatherIcon = mainActivity.findViewById(R.id.imageView_weatherIcon);
+        textView_lat_lon = mainActivity.findViewById(R.id.textView_lat_lon);
+        editText_ZipCode = mainActivity.findViewById(R.id.editText_ZipCode);
+        button_search = mainActivity.findViewById(R.id.button_search);
+        imageView_backgroundGif = mainActivity.findViewById(R.id.imageVIew_backgroundGif);
+
+        recyclerView_hourly = mainActivity.findViewById(R.id.listView_hourlyWeather);
+        recyclerView_daily = mainActivity.findViewById(R.id.listView_dailyWeather);
+        motionLayout = mainActivity.findViewById(R.id.motionLayout);
     }
 
 
@@ -440,8 +442,8 @@ class CityWeather {
         textView_currentHumidity.setText(getCurrentHumidity() + "%");
         textView_currentVisibility.setText(getCurrentVisibility() + " mi");
         textView_lat_lon.setText(String.format("(%s, %s)", getLat(), getLon()));
-        Glide.with(mainActivity).load(getCurrentIcon()).into(textView_currentWeatherIcon);
-        Glide.with(mainActivity).load(getCurrentGif()).into((ImageView) mainActivity.findViewById(R.id.image_view));
+        Glide.with(mainActivity).load(getCurrentIcon()).into(imageView_currentWeatherIcon);
+        Glide.with(mainActivity).load(getCurrentGif()).into(imageView_backgroundGif);
     }
 
 
