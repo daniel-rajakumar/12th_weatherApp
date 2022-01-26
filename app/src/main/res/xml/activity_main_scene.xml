@@ -11,6 +11,21 @@
     </Transition>
 
     <ConstraintSet android:id="@+id/start">
+
+        <Constraint
+            android:id="@+id/textView_weatherDescription"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            motion:layout_constraintTop_toBottomOf="@id/textView_currentTemp"
+            android:translationZ="10dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="-8dp"
+            android:visibility="visible" >
+
+            <CustomAttribute motion:attributeName="textColor" motion:customColorValue="@color/font"/>
+            <CustomAttribute motion:attributeName="textSize" motion:customFloatValue="30"/>
+        </Constraint>
     </ConstraintSet>
 
 
@@ -22,9 +37,10 @@
             android:layout_height="125dp"
             motion:layout_constraintBottom_toTopOf="@+id/view_line"
             motion:layout_constraintTop_toBottomOf="@id/textView_lat_lon"
-            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintLeft_toLeftOf="parent"
             android:translationZ="10dp"
             android:layout_marginTop="16dp"
+            android:layout_marginLeft="10dp"
             android:visibility="visible" />
         <Constraint
             android:id="@+id/textView_currentTemp"
@@ -32,20 +48,23 @@
             android:layout_height="wrap_content"
             motion:layout_constraintTop_toTopOf="@id/imageView_weatherIcon"
             motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toEndOf="@id/imageView_weatherIcon"
             android:translationZ="10dp"
             android:layout_marginTop="-8dp"
             android:visibility="visible" />
         <Constraint
             android:id="@+id/textView_weatherDescription"
-            motion:layout_constraintEnd_toEndOf="parent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:translationZ="10dp"
             motion:layout_constraintStart_toStartOf="@id/textView_currentTemp"
-            motion:layout_constraintRight_toRightOf="@id/textView_currentTemp"
             motion:layout_constraintTop_toBottomOf="@id/textView_currentTemp"
             android:visibility="visible"
-            android:layout_marginTop="-8dp"/>
+            android:layout_marginTop="-8dp">
+
+            <CustomAttribute motion:attributeName="textColor" motion:customColorValue="@color/font_alt"/>
+            <CustomAttribute motion:attributeName="textSize" motion:customFloatValue="20"/>
+        </Constraint>
 
 
         <Constraint

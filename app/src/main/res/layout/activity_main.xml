@@ -123,7 +123,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="-8dp"
-        android:text="overcast clouds"
+        android:text="rain"
         android:textAllCaps="true"
         android:textColor="@color/white"
         android:textSize="30sp"

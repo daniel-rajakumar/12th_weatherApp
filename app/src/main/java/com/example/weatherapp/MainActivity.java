@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     void updateInfo(){
         textView_currentTemp.setText(cityWeather.get().getCurrentTemp() + "°");
         textView_currentWeatherDescription.setText(cityWeather.get().getCurrentWeatherDescription());
+//        textView_currentWeatherDescription.setText("rain");
         textView_cityName.setText(cityWeather.get().getCityName());
         textView_windSpeed.setText(cityWeather.get().getCurrentWindSpeed() + " mph");
         textView_currentDate.setText(cityWeather.get().getCurrentDate());
