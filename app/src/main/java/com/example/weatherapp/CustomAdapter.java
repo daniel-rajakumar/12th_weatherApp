@@ -89,11 +89,11 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
         }
     }
 
-    public static class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
+    public static class HorizontalSpaceItemDecoration extends RecyclerView.ItemDecoration {
 
         private final int horizontalSpaceHeight;
 
-        public VerticalSpaceItemDecoration(int horizontalSpaceHeight) {
+        public HorizontalSpaceItemDecoration(int horizontalSpaceHeight) {
             this.horizontalSpaceHeight = horizontalSpaceHeight;
         }
 

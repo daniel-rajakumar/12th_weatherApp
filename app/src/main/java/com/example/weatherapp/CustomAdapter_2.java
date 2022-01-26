@@ -5,16 +5,13 @@ import android.graphics.Rect;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 
@@ -38,8 +35,8 @@ public class CustomAdapter_2 extends RecyclerView.Adapter<CustomAdapter_2.ViewHo
     @Override
     public void onBindViewHolder(@NonNull CustomAdapter_2.ViewHolder holder, int position) {
         Glide.with(context).load(list.get(position).getWeatherIcon()).into(holder.imageView_dailyWeatherIcon);
-        holder.TextView_dailyTempLow.setText(list.get(position).getTemp_low());
-        holder.textView_dailyTempHigh.setText(list.get(position).getTemp_high());
+        holder.textView_dailyTempHigh.setText(list.get(position).getTemp_high() + "°");
+        holder.TextView_dailyTempLow.setText(list.get(position).getTemp_low() + "°");
         holder.textView_dailyMainDescription.setText(list.get(position).getDescription());
         holder.textView_dailyTime.setText(list.get(position).getTime());
     }
@@ -67,17 +64,17 @@ public class CustomAdapter_2 extends RecyclerView.Adapter<CustomAdapter_2.ViewHo
         }
     }
 
-    public static class HorizontalSpaceItemDecoration extends RecyclerView.ItemDecoration {
+    public static class VerticalSpaceItemDecoration extends RecyclerView.ItemDecoration {
 
-        private final int horizontalSpaceHeight;
+        private final int verticalSpaceHeight;
 
-        public HorizontalSpaceItemDecoration(int horizontalSpaceHeight) {
-            this.horizontalSpaceHeight = horizontalSpaceHeight;
+        public VerticalSpaceItemDecoration(int verticalSpaceHeight) {
+            this.verticalSpaceHeight = verticalSpaceHeight;
         }
 
         public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
             if (parent.getChildAdapterPosition(view) != parent.getAdapter().getItemCount() - 1) {
-                outRect.right = horizontalSpaceHeight;
+                outRect.bottom = verticalSpaceHeight;
             }
         }
     }
