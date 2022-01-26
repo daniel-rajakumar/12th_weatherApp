@@ -106,5 +106,24 @@
             motion:layout_constraintTop_toBottomOf="@+id/textView_today"
             android:translationZ="10dp"
             motion:layout_constraintStart_toStartOf="parent" />
+        <Constraint
+            android:id="@+id/textView_sevenDays"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            motion:layout_constraintBottom_toBottomOf="@+id/textView_today"
+            android:layout_marginBottom="5dp"
+            motion:layout_constraintTop_toTopOf="@+id/textView_today"
+            android:translationZ="10dp"
+            android:visibility="gone" />
+        <Constraint
+            android:id="@+id/textView_today"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            motion:layout_constraintTop_toBottomOf="@+id/cardView"
+            android:translationZ="10dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="8dp"
+            android:visibility="gone" />
     </ConstraintSet>
 </MotionScene>

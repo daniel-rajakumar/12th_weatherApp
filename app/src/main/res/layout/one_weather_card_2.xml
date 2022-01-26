@@ -27,8 +27,8 @@
 
         <ImageView
             android:id="@+id/imageView_dailyWeatherIcon"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
@@ -47,9 +47,10 @@
         android:layout_marginEnd="8dp"
         android:text="TextView"
         android:textColor="@color/font"
-        app:layout_constraintBottom_toBottomOf="@+id/textView_dailyTempLow"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/textView_dailyTempLow"
-        app:layout_constraintTop_toTopOf="@+id/textView_dailyTempLow" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView_dailyTempLow"
@@ -57,7 +58,6 @@
         android:layout_height="wrap_content"
         android:text="TextView"
         android:textColor="@color/font_alt"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/textView_dailyTempHigh"
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -116,16 +116,17 @@ class CityWeather {
             }
         }
 
-        for (JSONObject jsonObject: daily_imperial)
-        {
+//        for (JSONObject jsonObject: daily_imperial) {
+        for (int i = 2; i < daily_imperial.size(); i++){
+
             try {
-                String temp_low =  jsonObject.getJSONObject("temp").get("min").toString();
-                String temp_high = jsonObject.getJSONObject("temp").get("max").toString();
-                String description = jsonObject.getJSONArray("weather").getJSONObject(0).get("main").toString();
-                String time = new SimpleDateFormat("hh:mm").format(
-                        new Date(1000 * Long.parseLong(jsonObject.get("dt").toString()))
+                String temp_low =  daily_imperial.get(i).getJSONObject("temp").get("min").toString();
+                String temp_high = daily_imperial.get(i).getJSONObject("temp").get("max").toString();
+                String description = daily_imperial.get(i).getJSONArray("weather").getJSONObject(0).get("main").toString();
+                String time = new SimpleDateFormat("EE").format(
+                        new Date(1000 * Long.parseLong(daily_imperial.get(i).get("dt").toString()))
                 );
-                int weatherIcon = getIcon(jsonObject.getJSONArray("weather").getJSONObject(0).get("main").toString());
+                int weatherIcon = getIcon(daily_imperial.get(i).getJSONArray("weather").getJSONObject(0).get("main").toString());
 
                 list_daily.add(new DailyWeather(time, temp_low, temp_high, description, weatherIcon));
             } catch (JSONException e) {
