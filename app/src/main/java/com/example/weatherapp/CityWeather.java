@@ -210,7 +210,9 @@ class CityWeather {
             }
 
             @Override
-            public void onTransitionCompleted(MotionLayout motionLayout, int currentId) { }
+            public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
+                updateAlpha(1);
+            }
 
             @Override
             public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) { }
