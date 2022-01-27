@@ -161,7 +161,7 @@
             android:layout_marginBottom="5dp"
             motion:layout_constraintTop_toTopOf="@+id/textView_today"
             android:translationZ="10dp"
-            android:visibility="gone" />
+            android:visibility="invisible" />
         <Constraint
             android:id="@+id/textView_today"
             android:layout_width="wrap_content"

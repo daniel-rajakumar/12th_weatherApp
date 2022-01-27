@@ -181,6 +181,10 @@ class CityWeather {
 
 
 
+
+
+
+
         motionLayout.setTransitionListener(new MotionLayout.TransitionListener() {
 
             @Override
@@ -193,12 +197,13 @@ class CityWeather {
                     textView_currentWeatherDescription.setText(getCurrentWeatherDescription());
                     Glide.with(mainActivity).load(getCurrentIcon()).into(imageView_currentWeatherIcon);
                     Glide.with(mainActivity).load(getCurrentGif()).into(imageView_backgroundGif);
+                    updateAlpha(1 - progress);
                 } else {
                     textView_currentTemp.setText("Temp");
                     textView_currentWeatherDescription.setText("Desceiption");
                     Glide.with(mainActivity).load(R.drawable.icon_heavyrain).into(imageView_currentWeatherIcon);
                     Glide.with(mainActivity).load(R.drawable.gif_rain).into(imageView_backgroundGif);
-
+                    updateAlpha(progress);
                 }
             }
 
@@ -207,6 +212,13 @@ class CityWeather {
 
             @Override
             public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) { }
+
+            void updateAlpha(float progress){
+                imageView_currentWeatherIcon.setImageAlpha((int)(progress * 255));
+                textView_currentTemp.setAlpha(progress);
+                textView_currentWeatherDescription.setAlpha(progress);
+                imageView_backgroundGif.setAlpha(progress);
+            }
         });
 
 
