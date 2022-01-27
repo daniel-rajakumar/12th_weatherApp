@@ -146,7 +146,7 @@ class CityWeather {
         }
 
 //        for (JSONObject jsonObject: daily_imperial) {
-        for (int i = 2; i < daily_imperial.size(); i++){
+        for (int i = 1; i < daily_imperial.size(); i++){
 
             try {
                 String temp_low =  daily_imperial.get(i).getJSONObject("temp").get("min").toString();
@@ -199,10 +199,12 @@ class CityWeather {
                     Glide.with(mainActivity).load(getCurrentGif()).into(imageView_backgroundGif);
                     updateAlpha(1 - progress);
                 } else {
-                    textView_currentTemp.setText("Temp");
-                    textView_currentWeatherDescription.setText("Desceiption");
-                    Glide.with(mainActivity).load(R.drawable.icon_heavyrain).into(imageView_currentWeatherIcon);
-                    Glide.with(mainActivity).load(R.drawable.gif_rain).into(imageView_backgroundGif);
+                    textView_currentTemp.setText(getTomorrowTemp() + "°");
+                    textView_currentWeatherDescription.setText(getTomorrowWeatherDescription());
+                    Glide.with(mainActivity).load(getTomorrowIcon()).into(imageView_currentWeatherIcon);
+                    Glide.with(mainActivity).load(getTomorrowGif()).into(imageView_backgroundGif);
+//                    Glide.with(mainActivity).load(R.drawable.icon_heavyrain).into(imageView_currentWeatherIcon);
+//                    Glide.with(mainActivity).load(R.drawable.gif_rain).into(imageView_backgroundGif);
                     updateAlpha(progress);
                 }
             }
@@ -376,11 +378,25 @@ class CityWeather {
         } catch (JSONException e) { return null; }
     }
 
+    public String getTomorrowTemp() {
+        try {
+            return daily_imperial.get(1).getJSONObject("temp").get("max").toString();
+        } catch (JSONException e) { return null; }
+    }
+
+
     public String getCurrentWeatherDescription(){
         try {
             return current_metric.get(0).getJSONArray("weather").getJSONObject(0).get("description").toString();
         } catch (JSONException e) { return null; }
     }
+
+    public String getTomorrowWeatherDescription(){
+        try {
+            return daily_imperial.get(1).getJSONArray("weather").getJSONObject(0).get("description").toString();
+        } catch (JSONException e) { return null; }
+    }
+
 
     public double round(double num, int place){
         return (double) Math.round(num * Math.pow(10, place)) / Math.pow(10, place);
@@ -388,8 +404,23 @@ class CityWeather {
 
     public int getCurrentIcon(){
         try {
-            return getIcon(current_metric.get(0).getJSONArray("weather").getJSONObject(0).get("main").toString());
+            return getIcon(current_imperial.get(0).getJSONArray("weather").getJSONObject(0).get("main").toString());
         } catch (JSONException e) { return -1; }
+    }
+
+    public int getTomorrowIcon(){
+        try {
+            return getIcon(daily_imperial.get(1).getJSONArray("weather").getJSONObject(0).get("main").toString());
+        } catch (JSONException e) { return -1; }
+    }
+
+
+
+    public int getTomorrowGif(){
+//        try {
+//            return getIcon(daily_imperial.get(1).getJSONArray("weather").getJSONObject(0).get("main").toString());
+//        } catch (JSONException e) { return -1; }
+        return R.drawable.gif_rain;
     }
 
     public int getCurrentGif(){
