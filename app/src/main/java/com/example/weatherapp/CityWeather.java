@@ -218,9 +218,9 @@ class CityWeather {
             public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) { }
 
             void updateAlpha(float progress){
-                imageView_currentWeatherIcon.setImageAlpha((int)(progress * 255));
-                textView_currentTemp.setAlpha(progress);
-                textView_currentWeatherDescription.setAlpha(progress);
+//                imageView_currentWeatherIcon.setImageAlpha((int)(progress * 255));
+//                textView_currentTemp.setAlpha(progress);
+//                textView_currentWeatherDescription.setAlpha(progress);
                 imageView_backgroundGif.setAlpha(progress);
             }
         });

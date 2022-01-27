@@ -53,7 +53,7 @@
             motion:layout_constraintLeft_toLeftOf="parent"
             android:translationZ="10dp"
             android:layout_marginTop="16dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="15dp"
             android:visibility="visible" />
         <Constraint
             android:id="@+id/textView_currentTemp"
@@ -135,13 +135,12 @@
         <Constraint
             android:id="@+id/listView_hourlyWeather"
             motion:layout_constraintEnd_toEndOf="parent"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintTop_toBottomOf="@+id/textView_today"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            motion:layout_constraintTop_toBottomOf="parent"
             android:translationZ="10dp"
             motion:layout_constraintStart_toStartOf="parent"
-            android:visibility="invisible" />
+            android:visibility="visible" />
         <Constraint
             android:id="@+id/listView_dailyWeather"
             motion:layout_constraintEnd_toEndOf="parent"
@@ -181,6 +180,18 @@
             android:translationZ="10dp"
             motion:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="40dp"
+            android:visibility="visible" />
+
+        <Constraint
+            android:id="@+id/view_line"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            motion:layout_constraintTop_toBottomOf="@id/textView_currentDate"
+            android:translationZ="10dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginStart="35dp"
+            android:layout_marginEnd="35dp"
+            motion:layout_editor_absoluteX="35dp"
             android:visibility="visible" />
 
     </ConstraintSet>
