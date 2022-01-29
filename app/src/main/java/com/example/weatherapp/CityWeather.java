@@ -20,18 +20,22 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.IntStream;
 
 class CityWeather {
     String apiKey = "5f05d53229dbaaa68c7dca9bf5eacb09";
+    JSONObject[] jsonObjects;
     JSONObject jsonObject_geo,
             jsonObject_metric_oneCall, jsonObject_metric_history,
             jsonObject_imperial_oneCall, jsonObject_imperial_history;
@@ -75,7 +79,7 @@ class CityWeather {
         instanceCount++;
         geocoder = new Geocoder(mainActivity, Locale.getDefault());
         String link = "http://api.openweathermap.org/geo/1.0/zip?zip=" + zip + ",US&appid=" + apiKey;
-        jsonObject_geo = getJsonFromUrl(link);
+        jsonObject_geo = getJsonFromUrl(link)[0];
 
         Log.d("data", link + " -> " + jsonObject_geo);
         if (jsonObject_geo == null){
@@ -87,42 +91,17 @@ class CityWeather {
 
 
         try {
-            link = "https://api.openweathermap.org/data/2.5/onecall"
-                    + "?lat=" + jsonObject_geo.get("lat").toString()
-                    + "&lon=" + jsonObject_geo.get("lon").toString()
-    //                + "&exclude=" + "daily"
-                    + "&units=" + "metric"
-                    + "&appid=" + apiKey;
-            jsonObject_metric_oneCall = getJsonFromUrl(link);
+            jsonObjects = getJsonFromUrl(
+                    MessageFormat.format("https://api.openweathermap.org/data/2.5/onecall?lat={0}&lon={1}&units=metric&appid={2}", jsonObject_geo.get("lat"), jsonObject_geo.get("lon"), apiKey),
+                    MessageFormat.format("https://api.openweathermap.org/data/2.5/onecall?lat={0}&lon={1}&units=imperial&appid={2}", jsonObject_geo.get("lat"), jsonObject_geo.get("lon"), apiKey),
+                    MessageFormat.format("http://api.openweathermap.org/data/2.5/onecall/timemachine?lat={0}&lon={1}&dt={2}&units=metric&appid={3}", jsonObject_geo.get("lat"), jsonObject_geo.get("lon"), Long.toString(Instant.now().getEpochSecond()), apiKey),
+                    MessageFormat.format("http://api.openweathermap.org/data/2.5/onecall/timemachine?lat={0}&lon={1}&dt={2}&units=imperial&appid={3}", jsonObject_geo.get("lat"), jsonObject_geo.get("lon"), Long.toString(Instant.now().getEpochSecond()), apiKey)
+            );
 
-            link = "https://api.openweathermap.org/data/2.5/onecall"
-                    + "?lat=" + jsonObject_geo.get("lat").toString()
-                    + "&lon=" + jsonObject_geo.get("lon").toString()
-    //                + "&exclude=" + "daily"
-                    + "&units=" + "imperial"
-                    + "&appid=" + apiKey;
-            jsonObject_imperial_oneCall = getJsonFromUrl(link);
-
-
-            link = "http://api.openweathermap.org/data/2.5/onecall/timemachine"
-                    + "?lat=" + jsonObject_geo.get("lat").toString()
-                    + "&lon=" + jsonObject_geo.get("lon").toString()
-                    + "&dt=" + Instant.now().getEpochSecond()
-                    + "&units=" + "metric"
-                    + "&appid=" + apiKey;
-            jsonObject_metric_history = getJsonFromUrl(link);
-
-            Log.d("data", link + " -> " + jsonObject_metric_history);
-
-            link = "http://api.openweathermap.org/data/2.5/onecall/timemachine"
-                    + "?lat=" + jsonObject_geo.get("lat").toString()
-                    + "&lon=" + jsonObject_geo.get("lon").toString()
-                    + "&dt=" + Instant.now().getEpochSecond()
-                    + "&units=" + "imperial"
-                    + "&appid=" + apiKey;
-            jsonObject_imperial_history = getJsonFromUrl(link);
-            Log.d("data", link + " -> " + jsonObject_imperial_history);
-
+            jsonObject_metric_oneCall   = jsonObjects[0];
+            jsonObject_imperial_oneCall = jsonObjects[1];
+            jsonObject_metric_history   = jsonObjects[2];
+            jsonObject_imperial_history = jsonObjects[3];
 
             setUp_current();
             setUp_daily();
@@ -135,8 +114,8 @@ class CityWeather {
             try {
                 String temp = entry.getValue().get("temp").toString();
                 String time = new SimpleDateFormat("hh:mm").format(
-                                new Date(1000 * Long.parseLong(entry.getValue().get("dt").toString()))
-                              );
+                        new Date(1000 * Long.parseLong(entry.getValue().get("dt").toString()))
+                );
                 int weatherIcon = getIcon(entry.getValue().getJSONArray("weather").getJSONObject(0).get("main").toString());
 
                 list_hourly.add(new HourlyWeather(temp, time, weatherIcon, entry.getKey() == 0));
@@ -309,27 +288,37 @@ class CityWeather {
 
     }
 
-    private JSONObject getJsonFromUrl(String url) {
-        final JSONObject[] jsonObject = new JSONObject[1];
-        Thread thread = new Thread(() -> {
+    /**
+     * Takes a list of urls, runs in parallel, and returns the data as JSONObject[urls.length].
+     * @param urls
+     * @return JsonObject[]
+     */
+    private JSONObject[] getJsonFromUrl(String... urls) {
+        final JSONObject[] jsonObject = new JSONObject[urls.length];
+        Thread[] threads = new Thread[urls.length];
+
+        IntStream.range(0, urls.length).forEach(i ->
+            threads[i] = new Thread(() -> {
             try {
-                jsonObject[0] = new JSONObject(
+                jsonObject[i] = new JSONObject(
                         new Scanner(
-                                new URL(url).openStream()
+                                new URL(urls[i]).openStream()
                         ).nextLine());
             } catch (JSONException | IOException e) {
                 e.printStackTrace();
             }
-        });
+        }));
 
-        try {
-            thread.start();
-            thread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        for (Thread thread: threads) thread.start();
+        for (Thread thread: threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
 
-        return jsonObject[0];
+        return jsonObject;
     }
 
     public String getLat(){
