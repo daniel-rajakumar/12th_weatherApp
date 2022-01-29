@@ -250,26 +250,26 @@
             app:layout_constraintStart_toStartOf="@+id/textView_currentHumidity_1" />
 
         <ImageView
-            android:id="@+id/imageView_currentVisibility"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:id="@+id/imageView_currentFeelsLike"
+            android:layout_width="80dp"
+            android:layout_height="60dp"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
             android:contentDescription="TODO"
             android:scaleType="fitXY"
-            android:src="@mipmap/icon_visibility_foreground"
+            android:src="@mipmap/icon_feels_like_foreground"
             app:layout_constraintBottom_toBottomOf="@+id/imageView_currentHumidity"
-            app:layout_constraintEnd_toEndOf="@+id/textView_currentVisibility_1"
-            app:layout_constraintStart_toStartOf="@+id/textView_currentVisibility_1"
+            app:layout_constraintEnd_toEndOf="@+id/textView_currentFeelsLike_1"
+            app:layout_constraintStart_toStartOf="@+id/textView_currentFeelsLike_1"
             app:layout_constraintTop_toTopOf="@+id/imageView_currentHumidity" />
 
         <TextView
-            android:id="@+id/textView_currentVisibility_1"
+            android:id="@+id/textView_currentFeelsLike_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
-            android:text="10 mi"
+            android:text="40%"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:translationZ="20dp"
@@ -279,18 +279,18 @@
             app:layout_constraintTop_toTopOf="@+id/textView_currentHumidity_1" />
 
         <TextView
-            android:id="@+id/textView_currentVisibility_2"
+            android:id="@+id/textView_currentFeelsLike_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_weight="1"
-            android:text="Visibility"
+            android:text="Feels like"
             android:textColor="@color/font_alt"
             android:textSize="15sp"
             android:translationZ="20dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView_currentHumidity_2"
-            app:layout_constraintEnd_toEndOf="@+id/textView_currentVisibility_1"
-            app:layout_constraintStart_toStartOf="@+id/textView_currentVisibility_1"
+            app:layout_constraintEnd_toEndOf="@+id/textView_currentFeelsLike_1"
+            app:layout_constraintStart_toStartOf="@+id/textView_currentFeelsLike_1"
             app:layout_constraintTop_toTopOf="@+id/textView_currentHumidity_2" />
 
 

@@ -54,7 +54,7 @@ class CityWeather {
             textView_cityName,
             textView_currentDate,
             textView_currentHumidity,
-            textView_currentVisibility,
+            textView_currentFeelsLike,
             textView_lat_lon,
             textView_windSpeed;
 
@@ -197,12 +197,18 @@ class CityWeather {
                     textView_currentWeatherDescription.setText(getCurrentWeatherDescription());
                     Glide.with(mainActivity).load(getCurrentIcon()).into(imageView_currentWeatherIcon);
                     Glide.with(mainActivity).load(getCurrentGif()).into(imageView_backgroundGif);
-                    updateAlpha(1 - progress);
+                    textView_currentHumidity.setText(getCurrentHumidity() + "%");
+                    textView_currentFeelsLike.setText(getCurrentFeelsLike() + "°");
+                    textView_windSpeed.setText(getCurrentWindSpeed() + " mph");
+                    updateAlpha((1 - progress));
                 } else {
                     textView_currentTemp.setText(getTomorrowTemp() + "°");
                     textView_currentWeatherDescription.setText(getTomorrowWeatherDescription());
                     Glide.with(mainActivity).load(getTomorrowIcon()).into(imageView_currentWeatherIcon);
                     Glide.with(mainActivity).load(getTomorrowGif()).into(imageView_backgroundGif);
+                    textView_currentHumidity.setText(getTomorrowHumidity() + "%");
+                    textView_currentFeelsLike.setText(getTomorrowFeelsLike() + "°");
+                    textView_windSpeed.setText(getTomorrowWindSpeed() + " mph");
 //                    Glide.with(mainActivity).load(R.drawable.icon_heavyrain).into(imageView_currentWeatherIcon);
 //                    Glide.with(mainActivity).load(R.drawable.gif_rain).into(imageView_backgroundGif);
                     updateAlpha(progress);
@@ -347,9 +353,15 @@ class CityWeather {
     }
 
 
-    public String getCurrentVisibility(){
+    public String getCurrentFeelsLike(){
         try {
-            return round(Double.parseDouble(current_imperial.get(0).get("visibility").toString()) * 0.000621371, 2) + "";
+            return current_imperial.get(0).get("feels_like").toString();
+        } catch (JSONException e) { return null; }
+    }
+
+    public String getTomorrowFeelsLike(){
+        try {
+            return daily_imperial.get(0).getJSONObject("feels_like").get("day").toString();
         } catch (JSONException e) { return null; }
     }
 
@@ -360,9 +372,22 @@ class CityWeather {
         } catch (JSONException e) { return null; }
     }
 
+
+    public String getTomorrowHumidity(){
+        try {
+            return daily_imperial.get(0).get("humidity").toString();
+        } catch (JSONException e) { return null; }
+    }
+
     public String getCurrentWindSpeed(){
         try {
             return current_imperial.get(0).get("wind_speed").toString();
+        } catch (JSONException e) { return  null; }
+    }
+
+    public String getTomorrowWindSpeed(){
+        try {
+            return daily_imperial.get(0).get("wind_speed").toString();
         } catch (JSONException e) { return  null; }
     }
 
@@ -463,7 +488,7 @@ class CityWeather {
         textView_windSpeed = mainActivity.findViewById(R.id.textView_currentWindSpeed_1);
         textView_currentDate = mainActivity.findViewById(R.id.textView_currentDate);
         textView_currentHumidity = mainActivity.findViewById(R.id.textView_currentHumidity_1);
-        textView_currentVisibility = mainActivity.findViewById(R.id.textView_currentVisibility_1);
+        textView_currentFeelsLike = mainActivity.findViewById(R.id.textView_currentFeelsLike_1);
         imageView_currentWeatherIcon = mainActivity.findViewById(R.id.imageView_weatherIcon);
         textView_lat_lon = mainActivity.findViewById(R.id.textView_lat_lon);
         editText_ZipCode = mainActivity.findViewById(R.id.editText_ZipCode);
@@ -485,7 +510,7 @@ class CityWeather {
         textView_windSpeed.setText(getCurrentWindSpeed() + " mph");
         textView_currentDate.setText(getCurrentDate());
         textView_currentHumidity.setText(getCurrentHumidity() + "%");
-        textView_currentVisibility.setText(getCurrentVisibility() + " mi");
+        textView_currentFeelsLike.setText(getCurrentFeelsLike() + "°");
         textView_lat_lon.setText(String.format("(%s, %s)", getLat(), getLon()));
         Glide.with(mainActivity).load(getCurrentIcon()).into(imageView_currentWeatherIcon);
         Glide.with(mainActivity).load(getCurrentGif()).into(imageView_backgroundGif);
