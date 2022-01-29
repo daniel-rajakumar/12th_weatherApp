@@ -178,8 +178,8 @@
             android:scaleType="fitXY"
             android:src="@mipmap/icon_wind_foreground"
             app:layout_constraintBottom_toBottomOf="@+id/imageView_currentHumidity"
-            app:layout_constraintEnd_toEndOf="@+id/textView_currentWindSpeed_1"
-            app:layout_constraintStart_toStartOf="@+id/textView_currentWindSpeed_1"
+            app:layout_constraintEnd_toEndOf="@+id/textView_currentWindSpeed_2"
+            app:layout_constraintStart_toStartOf="@+id/textView_currentWindSpeed_2"
             app:layout_constraintTop_toTopOf="@+id/imageView_currentHumidity" />
 
         <TextView
@@ -192,8 +192,8 @@
             android:textSize="20sp"
             android:translationZ="20dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView_currentHumidity_1"
-            app:layout_constraintEnd_toStartOf="@+id/textView_currentHumidity_1"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/textView_currentWindSpeed_2"
+            app:layout_constraintStart_toStartOf="@+id/textView_currentWindSpeed_2"
             app:layout_constraintTop_toTopOf="@+id/textView_currentHumidity_1" />
 
         <TextView
@@ -206,8 +206,8 @@
             android:textSize="15sp"
             android:translationZ="20dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView_currentHumidity_2"
-            app:layout_constraintEnd_toEndOf="@+id/textView_currentWindSpeed_1"
-            app:layout_constraintStart_toStartOf="@+id/textView_currentWindSpeed_1"
+            app:layout_constraintEnd_toStartOf="@+id/textView_currentHumidity_2"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/textView_currentHumidity_2" />
 
         <ImageView
@@ -218,8 +218,8 @@
             android:contentDescription="TODO"
             android:scaleType="fitXY"
             android:src="@mipmap/icon_humidity_foreground"
-            app:layout_constraintEnd_toEndOf="@+id/textView_currentHumidity_1"
-            app:layout_constraintStart_toStartOf="@+id/textView_currentHumidity_1"
+            app:layout_constraintEnd_toEndOf="@+id/textView_currentHumidity_2"
+            app:layout_constraintStart_toStartOf="@+id/textView_currentHumidity_2"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -232,8 +232,8 @@
             android:textSize="20sp"
             android:translationZ="20dp"
             app:layout_constraintBottom_toTopOf="@+id/textView_currentHumidity_2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/textView_currentHumidity_2"
+            app:layout_constraintStart_toStartOf="@+id/textView_currentHumidity_2"
             app:layout_constraintTop_toBottomOf="@+id/imageView_currentHumidity" />
 
         <TextView
@@ -246,8 +246,8 @@
             android:textSize="15sp"
             android:translationZ="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/textView_currentHumidity_1"
-            app:layout_constraintStart_toStartOf="@+id/textView_currentHumidity_1" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
             android:id="@+id/imageView_currentFeelsLike"
@@ -259,8 +259,8 @@
             android:scaleType="fitXY"
             android:src="@mipmap/icon_feels_like_foreground"
             app:layout_constraintBottom_toBottomOf="@+id/imageView_currentHumidity"
-            app:layout_constraintEnd_toEndOf="@+id/textView_currentFeelsLike_1"
-            app:layout_constraintStart_toStartOf="@+id/textView_currentFeelsLike_1"
+            app:layout_constraintEnd_toEndOf="@+id/textView_currentFeelsLike_2"
+            app:layout_constraintStart_toStartOf="@+id/textView_currentFeelsLike_2"
             app:layout_constraintTop_toTopOf="@+id/imageView_currentHumidity" />
 
         <TextView
@@ -274,8 +274,8 @@
             android:textSize="20sp"
             android:translationZ="20dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView_currentHumidity_1"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView_currentHumidity_1"
+            app:layout_constraintEnd_toEndOf="@+id/textView_currentFeelsLike_2"
+            app:layout_constraintStart_toStartOf="@+id/textView_currentFeelsLike_2"
             app:layout_constraintTop_toTopOf="@+id/textView_currentHumidity_1" />
 
         <TextView
@@ -289,8 +289,8 @@
             android:textSize="15sp"
             android:translationZ="20dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView_currentHumidity_2"
-            app:layout_constraintEnd_toEndOf="@+id/textView_currentFeelsLike_1"
-            app:layout_constraintStart_toStartOf="@+id/textView_currentFeelsLike_1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView_currentHumidity_2"
             app:layout_constraintTop_toTopOf="@+id/textView_currentHumidity_2" />
 
 

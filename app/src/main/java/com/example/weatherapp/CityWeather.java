@@ -193,22 +193,22 @@ class CityWeather {
             @Override
             public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
                 if (motionLayout.getProgress() <= 0.5) {
-                    textView_currentTemp.setText(getCurrentTemp() + "°");
+                    textView_currentTemp.setText(String.format("%s°", getCurrentTemp()));
                     textView_currentWeatherDescription.setText(getCurrentWeatherDescription());
                     Glide.with(mainActivity).load(getCurrentIcon()).into(imageView_currentWeatherIcon);
                     Glide.with(mainActivity).load(getCurrentGif()).into(imageView_backgroundGif);
-                    textView_currentHumidity.setText(getCurrentHumidity() + "%");
-                    textView_currentFeelsLike.setText(getCurrentFeelsLike() + "°");
-                    textView_windSpeed.setText(getCurrentWindSpeed() + " mph");
+                    textView_currentHumidity.setText(String.format("%s%%", getCurrentHumidity()));
+                    textView_currentFeelsLike.setText(String.format("%s°", getCurrentFeelsLike()));
+                    textView_windSpeed.setText(String.format("%s mph", getCurrentWindSpeed()));
                     updateAlpha((1 - progress));
                 } else {
-                    textView_currentTemp.setText(getTomorrowTemp() + "°");
+                    textView_currentTemp.setText(String.format("%s°", getTomorrowTemp()));
                     textView_currentWeatherDescription.setText(getTomorrowWeatherDescription());
                     Glide.with(mainActivity).load(getTomorrowIcon()).into(imageView_currentWeatherIcon);
                     Glide.with(mainActivity).load(getTomorrowGif()).into(imageView_backgroundGif);
-                    textView_currentHumidity.setText(getTomorrowHumidity() + "%");
-                    textView_currentFeelsLike.setText(getTomorrowFeelsLike() + "°");
-                    textView_windSpeed.setText(getTomorrowWindSpeed() + " mph");
+                    textView_currentHumidity.setText(String.format("%s%%", getTomorrowHumidity()));
+                    textView_currentFeelsLike.setText(String.format("%s°", getTomorrowFeelsLike()));
+                    textView_windSpeed.setText(String.format("%s mph", getTomorrowWindSpeed()));
 //                    Glide.with(mainActivity).load(R.drawable.icon_heavyrain).into(imageView_currentWeatherIcon);
 //                    Glide.with(mainActivity).load(R.drawable.gif_rain).into(imageView_backgroundGif);
                     updateAlpha(progress);
@@ -503,14 +503,13 @@ class CityWeather {
 
 
     void updateInfo(MainActivity mainActivity){
-        textView_currentTemp.setText(getCurrentTemp() + "°");
+        textView_currentTemp.setText(String.format("%s°", getCurrentTemp()));
         textView_currentWeatherDescription.setText(getCurrentWeatherDescription());
-//        textView_currentWeatherDescription.setText("rain");
         textView_cityName.setText(getCityName());
-        textView_windSpeed.setText(getCurrentWindSpeed() + " mph");
+        textView_windSpeed.setText(String.format("%s mph", getCurrentWindSpeed()));
         textView_currentDate.setText(getCurrentDate());
-        textView_currentHumidity.setText(getCurrentHumidity() + "%");
-        textView_currentFeelsLike.setText(getCurrentFeelsLike() + "°");
+        textView_currentHumidity.setText(String.format("%s%%", getCurrentHumidity()));
+        textView_currentFeelsLike.setText(String.format("%s°", getCurrentFeelsLike()));
         textView_lat_lon.setText(String.format("(%s, %s)", getLat(), getLon()));
         Glide.with(mainActivity).load(getCurrentIcon()).into(imageView_currentWeatherIcon);
         Glide.with(mainActivity).load(getCurrentGif()).into(imageView_backgroundGif);
