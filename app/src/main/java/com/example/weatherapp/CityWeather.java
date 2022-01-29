@@ -34,12 +34,11 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.IntStream;
 
 class CityWeather {
-    String apiKey = "5f05d53229dbaaa68c7dca9bf5eacb09";
+    String apiKey;
     JSONObject[] jsonObjects;
     JSONObject jsonObject_geo,
             jsonObject_metric_oneCall, jsonObject_metric_history,
             jsonObject_imperial_oneCall, jsonObject_imperial_history;
-    Geocoder geocoder;
 
     TreeMap<Integer, JSONObject> current_metric = new TreeMap<>();
     TreeMap<Integer, JSONObject> current_imperial = new TreeMap<>();
@@ -65,7 +64,6 @@ class CityWeather {
 
     EditText editText_ZipCode;
     Button button_search;
-    AtomicReference<CityWeather> cityWeather;
     ImageView imageView_currentWeatherIcon, imageView_backgroundGif;
     MotionLayout motionLayout;
 
@@ -75,9 +73,9 @@ class CityWeather {
     CityWeather(MainActivity mainActivity, String zip) {
         list_hourly.clear();
         list_daily.clear();
+        apiKey = mainActivity.getResources().getString(R.string.api_key);
 
         instanceCount++;
-        geocoder = new Geocoder(mainActivity, Locale.getDefault());
         String link = "http://api.openweathermap.org/geo/1.0/zip?zip=" + zip + ",US&appid=" + apiKey;
         jsonObject_geo = getJsonFromUrl(link)[0];
 
@@ -148,10 +146,11 @@ class CityWeather {
         recyclerView_daily.setLayoutManager(new LinearLayoutManager(mainActivity, LinearLayoutManager.VERTICAL, false));
 
 
-        if (instanceCount == 1) {
+//        if (instanceCount == 1) {
+//        if (mainActivity) {
             recyclerView_hourly.addItemDecoration(new CustomAdapter.HorizontalSpaceItemDecoration(60));
             recyclerView_daily.addItemDecoration(new CustomAdapter_2.VerticalSpaceItemDecoration(40));
-        }
+//        }
         recyclerView_hourly.setAdapter(new CustomAdapter(list_hourly, mainActivity));
         recyclerView_daily.setAdapter(new CustomAdapter_2(list_daily, mainActivity));
 
