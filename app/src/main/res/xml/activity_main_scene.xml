@@ -193,6 +193,14 @@
             android:layout_marginEnd="35dp"
             motion:layout_editor_absoluteX="35dp"
             android:visibility="visible" />
+        <Constraint
+            android:id="@+id/textView_tomorrowTempMin"
+            motion:layout_constraintLeft_toRightOf="@id/textView_currentTemp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            motion:layout_constraintBottom_toBottomOf="@+id/textView_currentTemp"
+            android:visibility="visible"
+            android:translationZ="10dp" />
 
     </ConstraintSet>
 </MotionScene>

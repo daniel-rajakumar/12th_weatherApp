@@ -1,6 +1,5 @@
 package com.example.weatherapp;
 
-import android.location.Geocoder;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -24,13 +23,10 @@ import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Scanner;
 import java.util.TreeMap;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.IntStream;
 
 class CityWeather {
@@ -59,8 +55,8 @@ class CityWeather {
             textView_currentHumidity,
             textView_currentFeelsLike,
             textView_lat_lon,
-            textView_windSpeed;
-
+            textView_windSpeed,
+            textView_tomorrowTempMin ;
 
     EditText editText_ZipCode;
     Button button_search;
@@ -178,17 +174,15 @@ class CityWeather {
                     textView_currentHumidity.setText(String.format("%s%%", getCurrentHumidity()));
                     textView_currentFeelsLike.setText(String.format("%s°", getCurrentFeelsLike()));
                     textView_windSpeed.setText(String.format("%s mph", getCurrentWindSpeed()));
-                    updateAlpha((1 - progress));
+                    updateAlpha(1 - progress);
                 } else {
-                    textView_currentTemp.setText(String.format("%s°", getTomorrowTemp()));
+                    textView_currentTemp.setText(String.format("%s°", getTomorrowTempMax()));
                     textView_currentWeatherDescription.setText(getTomorrowWeatherDescription());
                     Glide.with(mainActivity).load(getTomorrowIcon()).into(imageView_currentWeatherIcon);
                     Glide.with(mainActivity).load(getTomorrowGif()).into(imageView_backgroundGif);
                     textView_currentHumidity.setText(String.format("%s%%", getTomorrowHumidity()));
                     textView_currentFeelsLike.setText(String.format("%s°", getTomorrowFeelsLike()));
                     textView_windSpeed.setText(String.format("%s mph", getTomorrowWindSpeed()));
-//                    Glide.with(mainActivity).load(R.drawable.icon_heavyrain).into(imageView_currentWeatherIcon);
-//                    Glide.with(mainActivity).load(R.drawable.gif_rain).into(imageView_backgroundGif);
                     updateAlpha(progress);
                 }
             }
@@ -202,9 +196,6 @@ class CityWeather {
             public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) { }
 
             void updateAlpha(float progress){
-//                imageView_currentWeatherIcon.setImageAlpha((int)(progress * 255));
-//                textView_currentTemp.setAlpha(progress);
-//                textView_currentWeatherDescription.setAlpha(progress);
                 imageView_backgroundGif.setAlpha(progress);
             }
         });
@@ -232,8 +223,8 @@ class CityWeather {
 
         jsonArray_hourly_metric = jsonObject_metric_history.getJSONArray("hourly");
         jsonArray_hourly_imperial = jsonObject_imperial_history.getJSONArray("hourly");
-//        for (int i = jsonArray_hourly_metric.length() - 2; i < jsonArray_hourly_metric.length(); i++) {
-        for (int i = jsonArray_hourly_metric.length() - 1; i < jsonArray_hourly_metric.length(); i++) {
+
+        for (int i = jsonArray_hourly_metric.length() - 2; i < jsonArray_hourly_metric.length(); i++) {
             current_metric.put(i - jsonArray_hourly_metric.length(), jsonArray_hourly_metric.getJSONObject(i));
             current_imperial.put(i - jsonArray_hourly_imperial.length(), jsonArray_hourly_imperial.getJSONObject(i));
         }
@@ -253,7 +244,7 @@ class CityWeather {
         JSONArray jsonArray_metric_daily = jsonObject_metric_oneCall.getJSONArray("daily");
         JSONArray jsonArray_imperial_daily = jsonObject_imperial_oneCall.getJSONArray("daily");
 
-        for (int i = 0; i < jsonArray_metric_daily.length(); i++) {
+        for (int i = 1; i < jsonArray_metric_daily.length(); i++) {
             daily_metric.add(jsonArray_metric_daily.getJSONObject(i));
             daily_imperial.add(jsonArray_imperial_daily.getJSONObject(i));
         }
@@ -393,9 +384,15 @@ class CityWeather {
         } catch (JSONException e) { return null; }
     }
 
-    public String getTomorrowTemp() {
+    public String getTomorrowTempMax() {
         try {
             return daily_imperial.get(1).getJSONObject("temp").get("max").toString();
+        } catch (JSONException e) { return null; }
+    }
+
+    public String getTomorrowTempMin(){
+        try {
+            return daily_imperial.get(1).getJSONObject("temp").get("min").toString();
         } catch (JSONException e) { return null; }
     }
 
@@ -428,6 +425,8 @@ class CityWeather {
             return getIcon(daily_imperial.get(1).getJSONArray("weather").getJSONObject(0).get("main").toString());
         } catch (JSONException e) { return -1; }
     }
+
+
 
 
 
@@ -477,14 +476,19 @@ class CityWeather {
         textView_currentDate = mainActivity.findViewById(R.id.textView_currentDate);
         textView_currentHumidity = mainActivity.findViewById(R.id.textView_currentHumidity_1);
         textView_currentFeelsLike = mainActivity.findViewById(R.id.textView_currentFeelsLike_1);
-        imageView_currentWeatherIcon = mainActivity.findViewById(R.id.imageView_weatherIcon);
         textView_lat_lon = mainActivity.findViewById(R.id.textView_lat_lon);
+        textView_tomorrowTempMin = mainActivity.findViewById(R.id.textView_tomorrowTempMin);
+
         editText_ZipCode = mainActivity.findViewById(R.id.editText_ZipCode);
+
         button_search = mainActivity.findViewById(R.id.button_search);
+
         imageView_backgroundGif = mainActivity.findViewById(R.id.imageVIew_backgroundGif);
+        imageView_currentWeatherIcon = mainActivity.findViewById(R.id.imageView_weatherIcon);
 
         recyclerView_hourly = mainActivity.findViewById(R.id.listView_hourlyWeather);
         recyclerView_daily = mainActivity.findViewById(R.id.listView_dailyWeather);
+
         motionLayout = mainActivity.findViewById(R.id.motionLayout);
     }
 
@@ -499,6 +503,7 @@ class CityWeather {
         textView_currentHumidity.setText(String.format("%s%%", getCurrentHumidity()));
         textView_currentFeelsLike.setText(String.format("%s°", getCurrentFeelsLike()));
         textView_lat_lon.setText(String.format("(%s, %s)", getLat(), getLon()));
+        textView_tomorrowTempMin.setText(String.format("%s°", getTomorrowTempMin()));
         Glide.with(mainActivity).load(getCurrentIcon()).into(imageView_currentWeatherIcon);
         Glide.with(mainActivity).load(getCurrentGif()).into(imageView_backgroundGif);
     }
