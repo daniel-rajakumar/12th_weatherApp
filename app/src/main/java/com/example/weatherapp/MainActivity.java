@@ -1,6 +1,3 @@
-/*
- * TODO: MAKE SURE TO HIDE AND CHANGE THE API KEY LATER
- */
 package com.example.weatherapp;
 
 import android.app.Activity;
@@ -11,14 +8,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.bumptech.glide.*;
-
-import java.util.concurrent.atomic.AtomicReference;
 
 public class MainActivity extends AppCompatActivity {
     Button button_search;
@@ -54,11 +45,10 @@ public class MainActivity extends AppCompatActivity {
     public static void setWindowFlag(Activity activity, final int bits, boolean on) {
         Window win = activity.getWindow();
         WindowManager.LayoutParams winParams = win.getAttributes();
-        if (on) {
-            winParams.flags |= bits;
-        } else {
-            winParams.flags &= ~bits;
-        }
+
+        if (on) winParams.flags |= bits;
+        else    winParams.flags &= ~bits;
+
         win.setAttributes(winParams);
     }
 

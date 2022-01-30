@@ -18,25 +18,25 @@ import com.google.android.material.card.MaterialCardView;
 
 import java.util.ArrayList;
 
-public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
+public class CustomAdapter_hourly extends RecyclerView.Adapter<CustomAdapter_hourly.ViewHolder> {
 
     ArrayList<HourlyWeather> list;
     Context context;
 
-    public CustomAdapter(ArrayList<HourlyWeather> list, Context context) {
+    public CustomAdapter_hourly(ArrayList<HourlyWeather> list, Context context) {
         this.list = list;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public CustomAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CustomAdapter_hourly.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View inflater = LayoutInflater.from(parent.getContext()).inflate(R.layout.one_weather_card, parent, false);
         return new ViewHolder(inflater);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CustomAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CustomAdapter_hourly.ViewHolder holder, int position) {
         holder.textView_time.setText(list.get(position).getTime());
         holder.textView_temp.setText(list.get(position).getTemp() + "°");
         Glide.with(context).load(list.get(position).getWeatherIcon()).into(holder.imageView_icon);

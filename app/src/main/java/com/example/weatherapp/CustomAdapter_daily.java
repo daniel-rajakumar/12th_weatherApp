@@ -15,25 +15,25 @@ import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
-public class CustomAdapter_2 extends RecyclerView.Adapter<CustomAdapter_2.ViewHolder> {
+public class CustomAdapter_daily extends RecyclerView.Adapter<CustomAdapter_daily.ViewHolder> {
 
     ArrayList<DailyWeather> list;
     Context context;
 
-    public CustomAdapter_2(ArrayList<DailyWeather> list, Context context) {
+    public CustomAdapter_daily(ArrayList<DailyWeather> list, Context context) {
         this.list = list;
         this.context = context;
     }
 
     @NonNull
     @Override
-    public CustomAdapter_2.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public CustomAdapter_daily.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View inflater = LayoutInflater.from(parent.getContext()).inflate(R.layout.one_weather_card_2, parent, false);
         return new ViewHolder(inflater);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CustomAdapter_2.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CustomAdapter_daily.ViewHolder holder, int position) {
         Glide.with(context).load(list.get(position).getWeatherIcon()).into(holder.imageView_dailyWeatherIcon);
         holder.textView_dailyTempHigh.setText(list.get(position).getTemp_high() + "°");
         holder.TextView_dailyTempLow.setText(list.get(position).getTemp_low() + "°");

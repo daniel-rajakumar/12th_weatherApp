@@ -72,17 +72,14 @@ class CityWeather {
         apiKey = mainActivity.getResources().getString(R.string.api_key);
 
         instanceCount++;
-        String link = "http://api.openweathermap.org/geo/1.0/zip?zip=" + zip + ",US&appid=" + apiKey;
-        jsonObject_geo = getJsonFromUrl(link)[0];
+        jsonObject_geo = getJsonFromUrl("http://api.openweathermap.org/geo/1.0/zip?zip=" + zip + ",US&appid=" + apiKey)[0];
 
-        Log.d("data", link + " -> " + jsonObject_geo);
         if (jsonObject_geo == null){
             Toast.makeText(mainActivity, "Not found.", Toast.LENGTH_SHORT).show();
             return;
         }
 
         assignVariables(mainActivity);
-
 
         try {
             jsonObjects = getJsonFromUrl(
@@ -120,9 +117,7 @@ class CityWeather {
             }
         }
 
-//        for (JSONObject jsonObject: daily_imperial) {
         for (int i = 1; i < daily_imperial.size(); i++){
-
             try {
                 String temp_low =  daily_imperial.get(i).getJSONObject("temp").get("min").toString();
                 String temp_high = daily_imperial.get(i).getJSONObject("temp").get("max").toString();
@@ -143,12 +138,12 @@ class CityWeather {
 
 
         if (instanceCount == 1) {
-            recyclerView_hourly.addItemDecoration(new CustomAdapter.HorizontalSpaceItemDecoration(60));
-            recyclerView_daily.addItemDecoration(new CustomAdapter_2.VerticalSpaceItemDecoration(60));
+            recyclerView_hourly.addItemDecoration(new CustomAdapter_hourly.HorizontalSpaceItemDecoration(60));
+            recyclerView_daily.addItemDecoration(new CustomAdapter_daily.VerticalSpaceItemDecoration(60));
         }
 
-        recyclerView_hourly.setAdapter(new CustomAdapter(list_hourly, mainActivity));
-        recyclerView_daily.setAdapter(new CustomAdapter_2(list_daily, mainActivity));
+        recyclerView_hourly.setAdapter(new CustomAdapter_hourly(list_hourly, mainActivity));
+        recyclerView_daily.setAdapter(new CustomAdapter_daily(list_daily, mainActivity));
 
 
 
@@ -202,21 +197,8 @@ class CityWeather {
 
 
         updateInfo(mainActivity);
-//        print_windSpeed();
-//        print();
     }
 
-    void print_windSpeed(){
-        try {
-            Log.d("data", "windSpeed -> history: imperial: " + jsonObject_imperial_history.getJSONObject("current").get("wind_speed") + " mile/hr");
-            Log.d("data", "windSpeed -> oneCall: imperial: " + jsonObject_imperial_oneCall.getJSONObject("current").get("wind_speed") + " mile/hr");
-            Log.d("data", "windSpeed -> history: metric:   " + jsonObject_metric_history.getJSONObject("current").get("wind_speed") + " meter/sec");
-            Log.d("data", "windSpeed -> oneCall: metric:   " + jsonObject_metric_oneCall.getJSONObject("current").get("wind_speed") + " meter/sec");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     void setUp_current() throws JSONException {
         JSONArray jsonArray_hourly_metric, jsonArray_hourly_imperial;
@@ -228,8 +210,6 @@ class CityWeather {
             current_metric.put(i - jsonArray_hourly_metric.length(), jsonArray_hourly_metric.getJSONObject(i));
             current_imperial.put(i - jsonArray_hourly_imperial.length(), jsonArray_hourly_imperial.getJSONObject(i));
         }
-        Log.d("data2", "setUp_current: " + jsonObject_metric_oneCall.getJSONObject("current"));
-        Log.d("data2", "setUp_current: " + current_imperial);
 
         current_metric.put(0, jsonObject_metric_oneCall.getJSONObject("current"));
         current_imperial.put(0, jsonObject_imperial_oneCall.getJSONObject("current"));
@@ -253,33 +233,6 @@ class CityWeather {
         }
     }
 
-    void print() {
-        Log.d("data", "Current: ");
-        for (Map.Entry<Integer, JSONObject> entry : current_metric.entrySet()) {
-//            Log.d("data", i + " -> " + daily.get(i));
-            try {
-                Log.d("data", entry.getKey() + " -> " + new Date(1000 * Long.parseLong(entry.getValue().get("dt").toString())));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-        Log.d("data", "...");
-        Log.d("data", "...");
-        Log.d("data", "...");
-        Log.d("data", "...");
-        Log.d("data", "Daily: ");
-        for (int i = 0; i < daily_metric.size(); i++) {
-//            Log.d("data", i + " -> " + daily.get(i));
-            try {
-                Log.d("data", i + " -> " + new Date(1000 * Long.parseLong(daily_metric.get(i).get("dt").toString())));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-
-
-    }
 
     /**
      * Takes a list of urls, runs in parallel, and returns the data as JSONObject[urls.length].
@@ -301,7 +254,6 @@ class CityWeather {
             } catch (JSONException | IOException e) {
                 e.printStackTrace();
             }
-                Log.d("data", " -> " + jsonObject[i]);
         }));
 
         for (Thread thread: threads) thread.start();
@@ -385,7 +337,6 @@ class CityWeather {
 
     public String getCurrentTemp() {
         try {
-            Log.d("data", "getCurrentTemp: " + current_imperial);
             return current_imperial.get(0).get("temp").toString();
         } catch (JSONException e) { return null; }
     }
