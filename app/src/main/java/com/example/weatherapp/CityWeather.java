@@ -144,7 +144,7 @@ class CityWeather {
 
         if (instanceCount == 1) {
             recyclerView_hourly.addItemDecoration(new CustomAdapter.HorizontalSpaceItemDecoration(60));
-            recyclerView_daily.addItemDecoration(new CustomAdapter_2.VerticalSpaceItemDecoration(40));
+            recyclerView_daily.addItemDecoration(new CustomAdapter_2.VerticalSpaceItemDecoration(60));
         }
 
         recyclerView_hourly.setAdapter(new CustomAdapter(list_hourly, mainActivity));
