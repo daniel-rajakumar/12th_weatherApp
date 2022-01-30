@@ -97,6 +97,7 @@ class CityWeather {
             jsonObject_metric_history   = jsonObjects[2];
             jsonObject_imperial_history = jsonObjects[3];
 
+
             setUp_current();
             setUp_daily();
         } catch (JSONException e) {
@@ -111,8 +112,9 @@ class CityWeather {
                         new Date(1000 * Long.parseLong(entry.getValue().get("dt").toString()))
                 );
                 int weatherIcon = getIcon(entry.getValue().getJSONArray("weather").getJSONObject(0).get("main").toString());
+                int weatherGif = getGif(entry.getValue().getJSONArray("weather").getJSONObject(0).get("main").toString());
 
-                list_hourly.add(new HourlyWeather(temp, time, weatherIcon, entry.getKey() == 0));
+                list_hourly.add(new HourlyWeather(temp, time, weatherIcon, weatherGif,  entry.getKey() == 0));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -136,17 +138,15 @@ class CityWeather {
             }
         }
 
-
-
         recyclerView_hourly.setLayoutManager(new LinearLayoutManager(mainActivity, LinearLayoutManager.HORIZONTAL, false));
         recyclerView_daily.setLayoutManager(new LinearLayoutManager(mainActivity, LinearLayoutManager.VERTICAL, false));
 
 
-//        if (instanceCount == 1) {
-//        if (mainActivity) {
+        if (instanceCount == 1) {
             recyclerView_hourly.addItemDecoration(new CustomAdapter.HorizontalSpaceItemDecoration(60));
             recyclerView_daily.addItemDecoration(new CustomAdapter_2.VerticalSpaceItemDecoration(40));
-//        }
+        }
+
         recyclerView_hourly.setAdapter(new CustomAdapter(list_hourly, mainActivity));
         recyclerView_daily.setAdapter(new CustomAdapter_2(list_daily, mainActivity));
 
@@ -224,10 +224,12 @@ class CityWeather {
         jsonArray_hourly_metric = jsonObject_metric_history.getJSONArray("hourly");
         jsonArray_hourly_imperial = jsonObject_imperial_history.getJSONArray("hourly");
 
-        for (int i = jsonArray_hourly_metric.length() - 2; i < jsonArray_hourly_metric.length(); i++) {
+        for (int i = jsonArray_hourly_metric.length() - 1; i < jsonArray_hourly_metric.length(); i++) {
             current_metric.put(i - jsonArray_hourly_metric.length(), jsonArray_hourly_metric.getJSONObject(i));
             current_imperial.put(i - jsonArray_hourly_imperial.length(), jsonArray_hourly_imperial.getJSONObject(i));
         }
+        Log.d("data2", "setUp_current: " + jsonObject_metric_oneCall.getJSONObject("current"));
+        Log.d("data2", "setUp_current: " + current_imperial);
 
         current_metric.put(0, jsonObject_metric_oneCall.getJSONObject("current"));
         current_imperial.put(0, jsonObject_imperial_oneCall.getJSONObject("current"));
@@ -238,6 +240,7 @@ class CityWeather {
             current_metric.put(i + 1, jsonArray_hourly_metric.getJSONObject(i));
             current_imperial.put(i + 1, jsonArray_hourly_imperial.getJSONObject(i));
         }
+
     }
 
     void setUp_daily() throws JSONException {
@@ -294,9 +297,11 @@ class CityWeather {
                         new Scanner(
                                 new URL(urls[i]).openStream()
                         ).nextLine());
+
             } catch (JSONException | IOException e) {
                 e.printStackTrace();
             }
+                Log.d("data", " -> " + jsonObject[i]);
         }));
 
         for (Thread thread: threads) thread.start();
@@ -380,6 +385,7 @@ class CityWeather {
 
     public String getCurrentTemp() {
         try {
+            Log.d("data", "getCurrentTemp: " + current_imperial);
             return current_imperial.get(0).get("temp").toString();
         } catch (JSONException e) { return null; }
     }
@@ -410,10 +416,6 @@ class CityWeather {
     }
 
 
-    public double round(double num, int place){
-        return (double) Math.round(num * Math.pow(10, place)) / Math.pow(10, place);
-    }
-
     public int getCurrentIcon(){
         try {
             return getIcon(current_imperial.get(0).getJSONArray("weather").getJSONObject(0).get("main").toString());
@@ -428,20 +430,16 @@ class CityWeather {
 
 
 
-
-
     public int getTomorrowGif(){
-//        try {
-//            return getIcon(daily_imperial.get(1).getJSONArray("weather").getJSONObject(0).get("main").toString());
-//        } catch (JSONException e) { return -1; }
-        return R.drawable.gif_rain;
+        try {
+            return getGif(daily_imperial.get(1).getJSONArray("weather").getJSONObject(0).get("main").toString());
+        } catch (JSONException e) { return -1; }
     }
 
     public int getCurrentGif(){
-//        try {
-//            return getGif(current_metric.get(0).getJSONArray("weather").getJSONObject(0).get("main").toString());
-//        } catch (JSONException e) { return -1; }
-        return R.drawable.gif_snow;
+        try {
+            return getGif(current_imperial.get(0).getJSONArray("weather").getJSONObject(0).get("main").toString());
+        } catch (JSONException e) { return -1; }
     }
 
     public int getIcon(String mainDescription){
@@ -458,13 +456,13 @@ class CityWeather {
 
     public int getGif(String mainDescription){
         switch (mainDescription.toLowerCase()) {
-            case "thunderstorm": return R.drawable.icon_thunder;
-            case "drizzle": return R.drawable.icon_heavyrain;
+            case "thunderstorm": return R.drawable.gif_thunder;
+            case "drizzle": return R.drawable.gif_dizzle;
             case "rain": return R.drawable.gif_rain;
             case "snow": return R.drawable.gif_snow;
-            case "clear": return R.drawable.icon_sunny;
-            case "clouds": return R.drawable.icon_cloudy;
-            default: return R.drawable.icon_mist;
+            case "clear": return R.drawable.gif_clear;
+            case "clouds": return R.drawable.gif_cloud;
+            default: return R.drawable.gif_mist;
         }
     }
 

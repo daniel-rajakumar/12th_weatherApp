@@ -45,7 +45,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder
 
 
         if (list.get(position).isCurrent()){
-            Glide.with(context).load(R.drawable.gif_snow).into(holder.imageView_background);
+            Glide.with(context).load(list.get(position).getWeatherGif()).into(holder.imageView_background);
             holder.cardView_weatherCard.setContentPadding(0, 0, 0, 0);
             layoutParams.setMargins(0, 0, 0, 0);
             holder.imageView_icon.getLayoutParams().width = 175;

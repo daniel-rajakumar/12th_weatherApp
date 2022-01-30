@@ -31,4 +31,5 @@ public class DailyWeather {
     public int getWeatherIcon() {
         return weatherIcon;
     }
+
 }
