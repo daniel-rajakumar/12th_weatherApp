@@ -39,6 +39,25 @@
 
             <CustomAttribute motion:attributeName="textSize" motion:customFloatValue="66"/>
         </Constraint>
+        <Constraint
+            android:layout_height="0dp"
+            android:layout_marginBottom="-8dp"
+            motion:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            android:id="@+id/cardView"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent" />
+        <Constraint
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            motion:layout_constraintBottom_toBottomOf="@+id/constraintLayout"
+            android:layout_marginBottom="-8dp"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/cardView"
+            motion:layout_constraintVertical_bias="1.0" />
     </ConstraintSet>
 
 

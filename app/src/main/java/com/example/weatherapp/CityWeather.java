@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.constraintlayout.motion.widget.MotionLayout;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -61,7 +62,8 @@ class CityWeather {
     EditText editText_ZipCode;
     Button button_search;
     ImageView imageView_currentWeatherIcon, imageView_backgroundGif;
-    MotionLayout motionLayout;
+//    MotionLayout motionLayout;
+    ConstraintLayout motionLayout;
 
 
 
@@ -154,46 +156,46 @@ class CityWeather {
 
 
 
-        motionLayout.setTransitionListener(new MotionLayout.TransitionListener() {
-
-            @Override
-            public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) { }
-
-            @Override
-            public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
-                if (motionLayout.getProgress() <= 0.5) {
-                    textView_currentTemp.setText(String.format("%s°", getCurrentTemp()));
-                    textView_currentWeatherDescription.setText(getCurrentWeatherDescription());
-                    Glide.with(mainActivity).load(getCurrentIcon()).into(imageView_currentWeatherIcon);
-                    Glide.with(mainActivity).load(getCurrentGif()).into(imageView_backgroundGif);
-                    textView_currentHumidity.setText(String.format("%s%%", getCurrentHumidity()));
-                    textView_currentFeelsLike.setText(String.format("%s°", getCurrentFeelsLike()));
-                    textView_windSpeed.setText(String.format("%s mph", getCurrentWindSpeed()));
-                    updateAlpha(1 - progress);
-                } else {
-                    textView_currentTemp.setText(String.format("%s°", getTomorrowTempMax()));
-                    textView_currentWeatherDescription.setText(getTomorrowWeatherDescription());
-                    Glide.with(mainActivity).load(getTomorrowIcon()).into(imageView_currentWeatherIcon);
-                    Glide.with(mainActivity).load(getTomorrowGif()).into(imageView_backgroundGif);
-                    textView_currentHumidity.setText(String.format("%s%%", getTomorrowHumidity()));
-                    textView_currentFeelsLike.setText(String.format("%s°", getTomorrowFeelsLike()));
-                    textView_windSpeed.setText(String.format("%s mph", getTomorrowWindSpeed()));
-                    updateAlpha(progress);
-                }
-            }
-
-            @Override
-            public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
-                updateAlpha(1);
-            }
-
-            @Override
-            public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) { }
-
-            void updateAlpha(float progress){
-                imageView_backgroundGif.setAlpha(progress);
-            }
-        });
+//        motionLayout.setTransitionListener(new MotionLayout.TransitionListener() {
+//
+//            @Override
+//            public void onTransitionStarted(MotionLayout motionLayout, int startId, int endId) { }
+//
+//            @Override
+//            public void onTransitionChange(MotionLayout motionLayout, int startId, int endId, float progress) {
+//                if (motionLayout.getProgress() <= 0.5) {
+//                    textView_currentTemp.setText(String.format("%s°", getCurrentTemp()));
+//                    textView_currentWeatherDescription.setText(getCurrentWeatherDescription());
+//                    Glide.with(mainActivity).load(getCurrentIcon()).into(imageView_currentWeatherIcon);
+//                    Glide.with(mainActivity).load(getCurrentGif()).into(imageView_backgroundGif);
+//                    textView_currentHumidity.setText(String.format("%s%%", getCurrentHumidity()));
+//                    textView_currentFeelsLike.setText(String.format("%s°", getCurrentFeelsLike()));
+//                    textView_windSpeed.setText(String.format("%s mph", getCurrentWindSpeed()));
+//                    updateAlpha(1 - progress);
+//                } else {
+//                    textView_currentTemp.setText(String.format("%s°", getTomorrowTempMax()));
+//                    textView_currentWeatherDescription.setText(getTomorrowWeatherDescription());
+//                    Glide.with(mainActivity).load(getTomorrowIcon()).into(imageView_currentWeatherIcon);
+//                    Glide.with(mainActivity).load(getTomorrowGif()).into(imageView_backgroundGif);
+//                    textView_currentHumidity.setText(String.format("%s%%", getTomorrowHumidity()));
+//                    textView_currentFeelsLike.setText(String.format("%s°", getTomorrowFeelsLike()));
+//                    textView_windSpeed.setText(String.format("%s mph", getTomorrowWindSpeed()));
+//                    updateAlpha(progress);
+//                }
+//            }
+//
+//            @Override
+//            public void onTransitionCompleted(MotionLayout motionLayout, int currentId) {
+//                updateAlpha(1);
+//            }
+//
+//            @Override
+//            public void onTransitionTrigger(MotionLayout motionLayout, int triggerId, boolean positive, float progress) { }
+//
+//            void updateAlpha(float progress){
+//                imageView_backgroundGif.setAlpha(progress);
+//            }
+//        });
 
 
         updateInfo(mainActivity);
